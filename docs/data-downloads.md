@@ -41,3 +41,48 @@ directory layout without committing datasets.
 Fundamental and reference adapters remain separate because historical
 fundamentals require trustworthy publication or availability dates. They must
 not be inferred from a current company snapshot.
+
+## Complete V1/V2 acquisition
+
+After loading `.env`, run a small end-to-end provider test:
+
+```bash
+python scripts/download_v1_v2_data.py --max-symbols 5
+```
+
+The complete active-and-delisted U.S. stock run is resumable:
+
+```bash
+python scripts/download_v1_v2_data.py
+```
+
+It stays below a 75-request/minute subscription by defaulting to 70 requests per
+minute. Rerunning skips existing symbol/endpoint snapshots and records failures
+in a manifest under `data/raw/`.
+
+## Filing-aware fundamentals
+
+Alpha Vantage statements are useful normalized source data, but SEC filing dates
+are the authoritative availability timestamps for U.S. issuers. Configure the
+identifying user agent required by SEC fair-access policy:
+
+```text
+SEC_USER_AGENT=MarketLab your-email@example.com
+```
+
+Then download the nightly Company Facts and Submissions bulk archives:
+
+```bash
+python scripts/download_sec_bulk.py
+```
+
+These archives come directly from SEC EDGAR and require no API key. They are
+large; keep them out of Git and retain their raw ZIP snapshots.
+
+## Data still requiring a licensed source
+
+Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a
+point-in-time classification history. Research that requires historically exact
+GICS membership needs a licensed classification dataset such as S&P Capital IQ,
+Compustat, or another vendor with effective dates. Until then, MarketLab must
+label sector-neutral historical results with that limitation.

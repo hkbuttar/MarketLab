@@ -1,2 +1,2 @@
 # MarketLab — Quantitative Research, Backtesting & Strategy Validation Platform
-Full-stack quantitative research platform for factor analysis, systematic strategy backtesting, realistic transaction-cost modeling, walk-forward ML validation, portfolio risk analytics, and robustness testing on daily U.S. equity data. Built for reproducible research—not live trading.
+Full-stack quantitative research platform for factor analysis, multi-factor strategy construction, realistic portfolio backtesting, transaction-cost and capacity modeling, walk-forward ML validation, factor attribution, regime analysis, and robustness testing on daily U.S. equity data.

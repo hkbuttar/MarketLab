@@ -1,0 +1,2 @@
+"""Factor tear-sheet assembly."""
+

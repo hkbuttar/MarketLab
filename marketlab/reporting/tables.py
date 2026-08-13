@@ -1,0 +1,1 @@
+"""Research table generation."""

@@ -1,0 +1,2 @@
+"""Regime-conditioned performance analysis."""
+

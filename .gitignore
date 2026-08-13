@@ -1,0 +1,29 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+node_modules/
+frontend/dist/
+
+# Generated research artifacts and local datasets
+data/raw/*
+data/processed/*
+data/features/*
+experiments/*
+reports/*
+notebooks/.ipynb_checkpoints/
+
+# Keep scaffold placeholders
+!data/**/.gitkeep
+!experiments/.gitkeep
+!reports/.gitkeep
+

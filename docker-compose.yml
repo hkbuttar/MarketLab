@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: marketlab
+      POSTGRES_USER: marketlab
+      POSTGRES_PASSWORD: marketlab
+    ports:
+      - "5432:5432"
+    volumes:
+      - marketlab-postgres:/var/lib/postgresql/data
+
+volumes:
+  marketlab-postgres:
+

@@ -1,0 +1,1 @@
+"""Factor information-coefficient analysis."""

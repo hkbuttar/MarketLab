@@ -1,0 +1,1 @@
+"""Systematic strategy definitions."""

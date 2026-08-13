@@ -1,2 +1,1 @@
 """Backtest result models."""
-

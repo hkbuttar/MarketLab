@@ -12,9 +12,10 @@ research report without rebuilding the stack for every strategy.
 
 ## Status
 
-The repository structure and Python package boundaries are scaffolded. Domain
-modules intentionally contain no implementation yet; development follows the
-data-to-report dependency order described in the project blueprint.
+The repository foundation, automated quality checks, and Python package
+boundaries are in place. Domain modules intentionally contain no implementation
+yet; development follows the data-to-report dependency order described in the
+project blueprint.
 
 ## Scope
 
@@ -37,6 +38,7 @@ source .venv/bin/activate
 python -m pip install -e '.[dev]'
 pytest
 ruff check .
+black --check .
 ```
 
 PostgreSQL is available for later backend work:

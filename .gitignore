@@ -15,15 +15,15 @@ node_modules/
 frontend/dist/
 
 # Generated research artifacts and local datasets
-data/raw/*
-data/processed/*
-data/features/*
+data/raw/**
+data/processed/**
+data/features/**
 experiments/*
 reports/*
 notebooks/.ipynb_checkpoints/
 
 # Keep scaffold placeholders
+!data/**/
 !data/**/.gitkeep
 !experiments/.gitkeep
 !reports/.gitkeep
-

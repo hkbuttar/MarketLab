@@ -77,7 +77,9 @@ python scripts/download_sec_bulk.py
 ```
 
 These archives come directly from SEC EDGAR and require no API key. They are
-large; keep them out of Git and retain their raw ZIP snapshots.
+large; the downloader streams them to `.part` files, verifies the ZIP signature,
+checks advertised size against available disk space, and atomically finalizes
+successful snapshots. Keep them out of Git and retain their raw ZIP snapshots.
 
 ## Data still requiring a licensed source
 

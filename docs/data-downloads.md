@@ -184,6 +184,20 @@ This writes research-safe observations to
 `data/processed/prices/prices_clean.csv.gz` and preserves every rejected row,
 with deterministic reason codes, in `reports/price_quarantine.csv.gz`.
 
+## Point-in-time market capitalization
+
+Join historically reported shares to the latest clean, unadjusted closing price
+available on or before each filing timestamp:
+
+```bash
+python scripts/add_market_cap.py
+```
+
+The result is written to
+`data/processed/fundamentals/fundamentals_valued.csv.gz`. Using the unadjusted
+close with the historically reported share count preserves the economic market
+capitalization at that time; no future trading date is used.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

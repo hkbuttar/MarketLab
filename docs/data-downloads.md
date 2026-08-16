@@ -452,6 +452,16 @@ ranks for an investment-ranking objective. Dates and symbols remain explicit
 for chronological splitting, every feature has a missingness indicator, and the
 raw forward return is retained only for evaluation—not as a model feature.
 
+## Ranking models
+
+MarketLab intentionally supports exactly three ranking regressors: Elastic Net,
+Random Forest, and histogram gradient-boosted trees. All use deterministic
+seeds and fold-local median imputation; Elastic Net additionally standardizes
+features within its training fold. The boosted model disables internal random
+early-stopping splits so chronological validation remains controlled by the
+walk-forward engine. Neural networks and unregistered model families are
+outside the project scope.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

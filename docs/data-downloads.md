@@ -301,6 +301,20 @@ return, SPY benchmark NAV, and cumulative costs for each strategy. Exchange test
 instruments identified by the security reference data are excluded from
 valuation.
 
+## Performance analytics
+
+Build return, risk, drawdown, benchmark-relative, calendar-period, and realized
+trading statistics from the daily backtest:
+
+```bash
+python scripts/build_performance_analytics.py
+```
+
+The command writes `reports/performance/performance_summary.json` and
+`reports/performance/period_returns.csv`. Sharpe and Sortino default to a zero
+risk-free rate; pass `--risk-free-rate 0.04`, for example, to use a constant 4%
+annual assumption until the daily Treasury series is integrated.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

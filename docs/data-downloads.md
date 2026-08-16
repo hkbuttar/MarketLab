@@ -534,6 +534,12 @@ February 2018 through June 2026. Every active approach uses the same winsorized
 20% monthly one-way turnover limit, and 10-bps transaction-cost assumption.
 Outputs are written under `reports/ml/comparison/`.
 
+Each run also writes an immutable JSON manifest under
+`experiments/ml_strategy_comparison/`. The manifest records the command,
+parameters, Git revision and dirty state, reported metrics, and SHA-256 digest
+and byte size of every input and output artifact. This makes changes in either
+code or local research data visible when two runs are compared.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

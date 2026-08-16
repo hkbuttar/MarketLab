@@ -489,6 +489,21 @@ the same three models, writes a separate compressed prediction artifact, and
 compares standard versus purged mean monthly rank IC and top-quintile realized
 return at `reports/ml/walk_forward_purging_comparison.json`.
 
+## ML model evaluation
+
+Evaluate the purged out-of-sample predictions as monthly top-quintile
+portfolios:
+
+```bash
+python scripts/evaluate_ml_models.py
+```
+
+The report includes mean and stability of rank IC, top-minus-bottom quantile
+spread, gross and net CAGR, risk-free-adjusted Sharpe, turnover, a transparent
+10-bps one-way transaction-cost assumption, maximum drawdown, and comparison
+with matching 21-session SPY returns. Monthly diagnostics and the model summary
+are written under `reports/ml/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

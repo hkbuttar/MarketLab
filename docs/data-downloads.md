@@ -437,6 +437,21 @@ confidence. This is explicitly a MarketLab diagnostic, not an industry-standard
 statistic. The JSON methodology preserves every transformation and component;
 CSV and JSON results are written under `reports/validation/`.
 
+## Machine-learning ranking dataset
+
+Build the point-in-time monthly cross-sectional dataset:
+
+```bash
+python scripts/build_ml_dataset.py
+```
+
+The eight feature families are momentum, volatility, three-month trend,
+one-month reversal, liquidity, value, quality, and profitability. Features and
+the winsorized forward 21-session return target are converted to cross-sectional
+ranks for an investment-ranking objective. Dates and symbols remain explicit
+for chronological splitting, every feature has a missingness indicator, and the
+raw forward return is retained only for evaluation—not as a model feature.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

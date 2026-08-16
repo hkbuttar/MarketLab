@@ -7,6 +7,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from marketlab.data.loaders.canonical_fundamentals import (
+    _canonical_values,
     build_canonical_fundamentals,
 )
 from marketlab.data.loaders.sec_companyfacts import FACT_COLUMNS
@@ -85,6 +86,22 @@ def test_crosswalk_enforces_listing_interval(tmp_path: Path) -> None:
     result = build_canonical_fundamentals(facts, submissions, output, crosswalk)
 
     assert result["rows"] == 0
+
+
+def test_normalizes_cumulative_second_quarter_cash_flow() -> None:
+    history: dict[tuple[str, str, str], float] = {}
+    first = _canonical_values(
+        [_fact("NetCashProvidedByUsedInOperatingActivities", 20, "2023-01-01")],
+        "2023",
+        "Q1",
+        history,
+    )
+    second_fact = _fact("NetCashProvidedByUsedInOperatingActivities", 55, "2023-01-01")
+    second_fact["period_end"] = "2023-06-30"
+    second = _canonical_values([second_fact], "2023", "Q2", history)
+
+    assert first["operating_cash_flow"] == 20
+    assert second["operating_cash_flow"] == 35
 
 
 def _indexes(tmp_path: Path) -> tuple[Path, Path]:

@@ -43,6 +43,20 @@ FEATURES = {
         FeatureDefinition("return_on_assets", "fundamental", "Net income / assets."),
         FeatureDefinition("leverage", "fundamental", "Debt / assets."),
         FeatureDefinition("free_cash_flow_yield", "fundamental", "FCF / market cap."),
+        FeatureDefinition(
+            "revenue_growth_yoy", "fundamental", "Same-period revenue growth."
+        ),
+        FeatureDefinition(
+            "net_income_growth_yoy", "fundamental", "Same-period income growth."
+        ),
+        FeatureDefinition(
+            "asset_growth_yoy", "fundamental", "Same-period asset growth."
+        ),
+        FeatureDefinition(
+            "free_cash_flow_growth_yoy",
+            "fundamental",
+            "Same-period free-cash-flow growth.",
+        ),
     )
 }
 

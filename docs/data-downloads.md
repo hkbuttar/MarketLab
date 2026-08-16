@@ -209,7 +209,13 @@ python scripts/build_features.py
 Technical features include adjusted returns, 21/63/126/252-session momentum,
 12-to-1 momentum, annualized 21/63-session volatility, and 21-session average
 dollar volume. Fundamental features include valuation, profitability, leverage,
-and free-cash-flow ratios keyed to the original availability timestamp.
+free-cash-flow ratios, and same-period year-over-year growth keyed to the
+original availability timestamp. After quarterly normalization, rebuild only
+the smaller fundamental feature file with:
+
+```bash
+python scripts/build_features.py --skip-technical
+```
 
 ## Data still requiring a licensed source
 

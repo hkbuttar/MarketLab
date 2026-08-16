@@ -176,9 +176,13 @@ def _write_entity(
         groups[key].append(fact)
 
     written = 0
-    for (accession, fiscal_year, fiscal_period, _form), group in groups.items():
+    flow_history: dict[tuple[str, str, str], float] = {}
+    ordered_groups = sorted(
+        groups.items(), key=lambda item: (filings[item[0][0]][0], item[0][0])
+    )
+    for (accession, fiscal_year, fiscal_period, _form), group in ordered_groups:
         report_date, available_at = filings[accession]
-        values = _canonical_values(group)
+        values = _canonical_values(group, fiscal_year, fiscal_period, flow_history)
         for symbol in _symbols_on_date(intervals, report_date):
             writer.writerow(
                 {
@@ -213,8 +217,14 @@ def _symbols_on_date(
     )
 
 
-def _canonical_values(facts: list[dict[str, str]]) -> dict[str, float]:
+def _canonical_values(
+    facts: list[dict[str, str]],
+    fiscal_year: str = "",
+    fiscal_period: str = "",
+    flow_history: dict[tuple[str, str, str], float] | None = None,
+) -> dict[str, float]:
     candidates: dict[str, list[tuple[int, int, float]]] = defaultdict(list)
+    flow_candidates: dict[str, list[tuple[int, str, float]]] = defaultdict(list)
     debt: dict[str, float] = {}
     for fact in facts:
         concept = fact["concept"]
@@ -229,6 +239,9 @@ def _canonical_values(facts: list[dict[str, str]]) -> dict[str, float]:
         if metric is None:
             continue
         duration = _duration_days(fact["period_start"], fact["period_end"])
+        if metric in {"operating_cash_flow", "capital_expenditure"}:
+            flow_candidates[metric].append((duration, fact["period_start"], value))
+            continue
         priority = CONCEPT_PRIORITY.get(concept, 0)
         candidates[metric].append((priority, duration, value))
 
@@ -242,6 +255,18 @@ def _canonical_values(facts: list[dict[str, str]]) -> dict[str, float]:
         result["debt"] = debt.get("LongTermDebtCurrent", 0) + debt.get(
             "LongTermDebtNoncurrent", 0
         )
+    history = flow_history if flow_history is not None else {}
+    for metric, options in flow_candidates.items():
+        duration, start, value = min(options, key=lambda option: option[0])
+        if fiscal_period in {"Q2", "Q3"} and duration > 120:
+            prior = history.get((metric, fiscal_year, start))
+            if prior is not None:
+                result[metric] = value - prior
+        else:
+            result[metric] = value
+        if fiscal_period in {"Q1", "Q2", "Q3"}:
+            cumulative = max(options, key=lambda option: option[0])
+            history[(metric, fiscal_year, cumulative[1])] = cumulative[2]
     if "operating_cash_flow" in result and "capital_expenditure" in result:
         result["free_cash_flow"] = (
             result["operating_cash_flow"] - result["capital_expenditure"]

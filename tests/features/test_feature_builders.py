@@ -56,6 +56,53 @@ def test_builds_fundamental_ratios(tmp_path: Path) -> None:
     assert row["leverage"] == "0.2"
 
 
+def test_builds_same_period_year_over_year_growth(tmp_path: Path) -> None:
+    source = tmp_path / "growth.csv.gz"
+    with gzip.open(source, "wt", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=FUNDAMENTAL_COLUMNS)
+        writer.writeheader()
+        for year, revenue in ((2022, 100), (2023, 125)):
+            writer.writerow(
+                {
+                    "symbol": "AAA",
+                    "fiscal_period": f"{year}-Q2",
+                    "report_date": f"{year}-06-30",
+                    "available_date": f"{year}-08-01T12:00:00Z",
+                    "revenue": revenue,
+                }
+            )
+    output = tmp_path / "growth_features.csv.gz"
+
+    build_fundamental_features(source, output)
+
+    with gzip.open(output, "rt", encoding="utf-8", newline="") as file:
+        rows = list(csv.DictReader(file))
+    assert rows[1]["revenue_growth_yoy"] == "0.25"
+
+
+def test_missing_fiscal_year_leaves_growth_empty(tmp_path: Path) -> None:
+    source = tmp_path / "missing_year.csv.gz"
+    with gzip.open(source, "wt", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=FUNDAMENTAL_COLUMNS)
+        writer.writeheader()
+        writer.writerow(
+            {
+                "symbol": "AAA",
+                "fiscal_period": "-Q1",
+                "report_date": "2023-03-31",
+                "available_date": "2023-05-01T12:00:00Z",
+                "revenue": 100,
+            }
+        )
+    output = tmp_path / "missing_year_features.csv.gz"
+
+    build_fundamental_features(source, output)
+
+    with gzip.open(output, "rt", encoding="utf-8", newline="") as file:
+        row = next(csv.DictReader(file))
+    assert row["revenue_growth_yoy"] == ""
+
+
 def _price(day: str, symbol: str, close: int) -> dict[str, object]:
     return {
         "date": day,

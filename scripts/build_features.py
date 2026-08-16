@@ -17,7 +17,9 @@ def main() -> int:
     parser.add_argument(
         "--fundamentals",
         type=Path,
-        default=Path("data/processed/fundamentals/fundamentals_valued.csv.gz"),
+        default=Path(
+            "data/processed/fundamentals/fundamentals_normalized_valued.csv.gz"
+        ),
     )
     parser.add_argument(
         "--technical-output",
@@ -27,14 +29,20 @@ def main() -> int:
     parser.add_argument(
         "--fundamental-output",
         type=Path,
-        default=Path("data/features/fundamental/filing_ratios.csv.gz"),
+        default=Path("data/features/fundamental/filing_ratios_growth.csv.gz"),
     )
+    parser.add_argument("--skip-technical", action="store_true")
+    parser.add_argument("--skip-fundamental", action="store_true")
     args = parser.parse_args()
-    technical = build_daily_technical_features(args.prices, args.technical_output)
-    fundamental = build_fundamental_features(args.fundamentals, args.fundamental_output)
-    print(f"Technical rows: {technical['rows']}")
-    print(f"Technical symbols: {technical['symbols']}")
-    print(f"Fundamental rows: {fundamental['rows']}")
+    if not args.skip_technical:
+        technical = build_daily_technical_features(args.prices, args.technical_output)
+        print(f"Technical rows: {technical['rows']}")
+        print(f"Technical symbols: {technical['symbols']}")
+    if not args.skip_fundamental:
+        fundamental = build_fundamental_features(
+            args.fundamentals, args.fundamental_output
+        )
+        print(f"Fundamental rows: {fundamental['rows']}")
     return 0
 
 

@@ -28,7 +28,7 @@ def main() -> int:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("data/processed/fundamentals/fundamentals_point_in_time.csv.gz"),
+        default=Path("data/processed/fundamentals/fundamentals_normalized.csv.gz"),
     )
     args = parser.parse_args()
     result = build_canonical_fundamentals(

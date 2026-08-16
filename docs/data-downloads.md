@@ -366,6 +366,20 @@ French risk-free series, hit rate, rebalance turnover, and the worst drawdown
 inside a contiguous episode of each regime. CSV and JSON outputs are written to
 `reports/regimes/`.
 
+## Parameter sensitivity
+
+Evaluate gross month-end factor portfolios across 6/9/12-month momentum,
+20/40/60-session volatility, and top 10%/20%/30% selection sizes:
+
+```bash
+python scripts/run_parameter_sensitivity.py
+```
+
+The analysis recreates each neighboring factor directly from clean adjusted
+prices, applies the standard price/liquidity screen and cross-sectional 1%/99%
+winsorization, and reports every grid point without selecting a winner. Summary
+and Sharpe heatmap CSVs are written under `reports/validation/sensitivity/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

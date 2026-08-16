@@ -131,6 +131,20 @@ period, form, accession number, filing date, and exact acceptance timestamp when
 available. The filing date is used as a conservative fallback for older records
 without an acceptance timestamp.
 
+## Canonical fundamentals
+
+Create the canonical filing-aware fundamental table from both SEC indexes:
+
+```bash
+python scripts/process_fundamentals.py
+```
+
+The output is streamed to
+`data/processed/fundamentals/fundamentals.csv.gz`. It maps SEC registrants to
+current tickers, selects consistent accounting concepts, aggregates debt, and
+calculates free cash flow as operating cash flow less capital expenditure.
+Market capitalization remains empty until prices and shares are joined.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

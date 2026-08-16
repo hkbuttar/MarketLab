@@ -519,6 +519,21 @@ time-by-feature matrix and stability summary report mean importance, dispersion,
 and the fraction of test years in which each predictor ranked among the top
 three. Outputs are written under `reports/ml/explainability/`.
 
+## ML versus simple strategies
+
+Run the shared-period portfolio comparison:
+
+```bash
+python scripts/compare_ml_strategies.py
+```
+
+The comparison rebuilds the three purged ML portfolios and evaluates them
+alongside momentum, low-volatility, quality-value-momentum, and SPY from
+February 2018 through June 2026. Every active approach uses the same winsorized
+21-session forward returns, top-20% selection, equal weighting, 5% position cap,
+20% monthly one-way turnover limit, and 10-bps transaction-cost assumption.
+Outputs are written under `reports/ml/comparison/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

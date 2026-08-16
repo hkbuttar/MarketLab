@@ -355,6 +355,17 @@ volatility observations. The volatility threshold is lagged one session, so no
 future observation affects an existing label. Results and methodology metadata
 are written under `data/features/regimes/`.
 
+Condition strategy results on those regimes:
+
+```bash
+python scripts/analyze_regimes.py
+```
+
+The report includes conditional CAGR, Sharpe ratio using the aligned daily
+French risk-free series, hit rate, rebalance turnover, and the worst drawdown
+inside a contiguous episode of each regime. CSV and JSON outputs are written to
+`reports/regimes/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

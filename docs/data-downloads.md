@@ -256,6 +256,19 @@ python scripts/build_factor_tear_sheet.py
 The resulting JSON and CSV diagnostics are written under `reports/factors/` and
 are derived exclusively from the screened, winsorized investable panel.
 
+## Monthly target portfolios
+
+Construct momentum, low-volatility, and quality/value/momentum long-only target
+portfolios:
+
+```bash
+python scripts/build_portfolios.py
+```
+
+Each strategy selects its top score quintile, remains fully invested, caps each
+position at 5%, and limits one-way monthly turnover to 20%. Equal and
+score-proportional weighting are both supported by the reusable constructor.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

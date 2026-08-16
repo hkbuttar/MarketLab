@@ -21,18 +21,26 @@ def main() -> int:
         default=Path("data/processed/sec/submissions_index.zip"),
     )
     parser.add_argument(
+        "--crosswalk",
+        type=Path,
+        default=Path("data/processed/reference/security_crosswalk.csv.gz"),
+    )
+    parser.add_argument(
         "--output",
         type=Path,
-        default=Path("data/processed/fundamentals/fundamentals.csv.gz"),
+        default=Path("data/processed/fundamentals/fundamentals_point_in_time.csv.gz"),
     )
     args = parser.parse_args()
     result = build_canonical_fundamentals(
-        args.companyfacts_index, args.submissions_index, args.output
+        args.companyfacts_index,
+        args.submissions_index,
+        args.output,
+        args.crosswalk,
     )
     print(f"Dataset: {args.output}")
     print(f"Rows: {result['rows']}")
     print(f"SEC entities: {result['entities']}")
-    print(f"Entities without current ticker mappings: {result['unmapped_entities']}")
+    print(f"Entities without dated ticker mappings: {result['unmapped_entities']}")
     return 0
 
 

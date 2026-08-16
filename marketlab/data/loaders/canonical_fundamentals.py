@@ -42,7 +42,10 @@ DEBT_CONCEPTS = {"DebtCurrent", "LongTermDebtCurrent", "LongTermDebtNoncurrent"}
 
 
 def build_canonical_fundamentals(
-    companyfacts_index: Path, submissions_index: Path, output: Path
+    companyfacts_index: Path,
+    submissions_index: Path,
+    output: Path,
+    crosswalk: Path | None = None,
 ) -> dict[str, int]:
     """Stream one canonical row per mapped ticker and SEC filing period."""
 
@@ -54,6 +57,7 @@ def build_canonical_fundamentals(
         raise FileExistsError(f"partial canonical fundamentals exist: {partial}")
 
     tickers, filings = _load_submission_context(submissions_index)
+    securities = _load_crosswalk(crosswalk) if crosswalk else _undated(tickers)
     rows = 0
     entities = 0
     unmapped_entities = 0
@@ -72,21 +76,21 @@ def build_canonical_fundamentals(
                 cik = fact["cik"]
                 if current_cik and cik != current_cik:
                     written = _write_entity(
-                        writer, current_cik, entity_rows, tickers, filings
+                        writer, current_cik, entity_rows, securities, filings
                     )
                     rows += written
                     entities += 1
-                    unmapped_entities += int(current_cik not in tickers)
+                    unmapped_entities += int(current_cik not in securities)
                     entity_rows = []
                 current_cik = cik
                 entity_rows.append(fact)
             if current_cik:
                 written = _write_entity(
-                    writer, current_cik, entity_rows, tickers, filings
+                    writer, current_cik, entity_rows, securities, filings
                 )
                 rows += written
                 entities += 1
-                unmapped_entities += int(current_cik not in tickers)
+                unmapped_entities += int(current_cik not in securities)
         partial.replace(output)
     except BaseException:
         partial.unlink(missing_ok=True)
@@ -128,15 +132,34 @@ def _load_submission_context(
     return dict(tickers), filings
 
 
+def _load_crosswalk(path: Path) -> dict[str, list[tuple[str, str, str]]]:
+    securities: dict[str, set[tuple[str, str, str]]] = defaultdict(set)
+    with gzip.open(path, "rt", encoding="utf-8", newline="") as file:
+        for row in csv.DictReader(file):
+            if not row["cik"] or row["conflict"] == "true":
+                continue
+            securities[row["cik"]].add(
+                (row["symbol"], row["listing_start"], row["listing_end"])
+            )
+    return {cik: sorted(intervals) for cik, intervals in securities.items()}
+
+
+def _undated(tickers: dict[str, list[str]]) -> dict[str, list[tuple[str, str, str]]]:
+    return {
+        cik: [(symbol, "", "") for symbol in symbols]
+        for cik, symbols in tickers.items()
+    }
+
+
 def _write_entity(
     writer: csv.DictWriter,
     cik: str,
     facts: list[dict[str, str]],
-    tickers: dict[str, list[str]],
+    securities: dict[str, list[tuple[str, str, str]]],
     filings: dict[str, tuple[str, str]],
 ) -> int:
-    symbols = tickers.get(cik, [])
-    if not symbols:
+    intervals = securities.get(cik, [])
+    if not intervals:
         return 0
     groups: dict[tuple[str, str, str, str], list[dict[str, str]]] = defaultdict(list)
     for fact in facts:
@@ -156,7 +179,7 @@ def _write_entity(
     for (accession, fiscal_year, fiscal_period, _form), group in groups.items():
         report_date, available_at = filings[accession]
         values = _canonical_values(group)
-        for symbol in symbols:
+        for symbol in _symbols_on_date(intervals, report_date):
             writer.writerow(
                 {
                     "symbol": symbol,
@@ -176,6 +199,18 @@ def _write_entity(
             )
             written += 1
     return written
+
+
+def _symbols_on_date(
+    intervals: list[tuple[str, str, str]], report_date: str
+) -> list[str]:
+    return sorted(
+        {
+            symbol
+            for symbol, start, end in intervals
+            if (not start or start <= report_date) and (not end or report_date <= end)
+        }
+    )
 
 
 def _canonical_values(facts: list[dict[str, str]]) -> dict[str, float]:

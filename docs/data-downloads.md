@@ -140,8 +140,9 @@ python scripts/process_fundamentals.py
 ```
 
 The output is streamed to
-`data/processed/fundamentals/fundamentals.csv.gz`. It maps SEC registrants to
-current tickers, selects consistent accounting concepts, aggregates debt, and
+`data/processed/fundamentals/fundamentals_point_in_time.csv.gz`. It maps SEC
+registrants through the dated security crosswalk, excludes unresolved mapping
+conflicts, selects consistent accounting concepts, aggregates debt, and
 calculates free cash flow as operating cash flow less capital expenditure.
 Market capitalization remains empty until prices and shares are joined.
 

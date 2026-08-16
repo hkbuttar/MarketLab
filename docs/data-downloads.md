@@ -117,6 +117,20 @@ The resulting `data/processed/sec/submissions_index.zip` contains compressed
 `registrants.csv` and `filings.csv` members. Filing acceptance timestamps are
 retained so later fundamental joins can enforce historical availability.
 
+## SEC Company Facts index
+
+After building the submissions index, process the selected accounting concepts:
+
+```bash
+python scripts/process_sec_companyfacts.py
+```
+
+This reads `companyfacts.zip` directly and writes
+`data/processed/sec/companyfacts_index.zip`. Each selected fact retains its
+period, form, accession number, filing date, and exact acceptance timestamp when
+available. The filing date is used as a conservative fallback for older records
+without an acceptance timestamp.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

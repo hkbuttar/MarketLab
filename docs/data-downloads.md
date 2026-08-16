@@ -330,6 +330,17 @@ report at `reports/attribution/factor_regression.json` contains annualized alpha
 market, size, value, profitability, investment and momentum betas, classical
 OLS standard errors, observation counts, and R-squared.
 
+Build monthly sector weights, active weights against an ADV-weighted investable
+universe proxy, rank-factor exposures, market beta, and concentration metrics:
+
+```bash
+python scripts/build_exposure_analysis.py
+```
+
+Outputs are written under `reports/attribution/`. Every summary records that
+Alpha Vantage classifications are current labels without historical effective
+dates; they are not represented as point-in-time GICS classifications.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

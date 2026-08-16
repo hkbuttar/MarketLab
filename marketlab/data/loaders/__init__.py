@@ -13,12 +13,14 @@ from marketlab.data.loaders.price_dataset import (
 )
 from marketlab.data.loaders.sec_companyfacts import build_sec_companyfacts_index
 from marketlab.data.loaders.sec_submissions import build_sec_submissions_index
+from marketlab.data.loaders.security_crosswalk import build_security_crosswalk
 
 __all__ = [
     "InvalidSnapshotError",
     "build_canonical_fundamentals",
     "build_sec_companyfacts_index",
     "build_sec_submissions_index",
+    "build_security_crosswalk",
     "latest_price_snapshot",
     "load_alpha_vantage_prices",
     "write_price_dataset",

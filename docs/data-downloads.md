@@ -145,6 +145,20 @@ current tickers, selects consistent accounting concepts, aggregates debt, and
 calculates free cash flow as operating cash flow less capital expenditure.
 Market capitalization remains empty until prices and shares are joined.
 
+## Security crosswalk
+
+Build a ticker-to-CIK crosswalk from the latest Alpha Vantage listings, overview
+CIKs, and SEC registrant mappings:
+
+```bash
+python scripts/process_security_crosswalk.py
+```
+
+The output at `data/processed/reference/security_crosswalk.csv.gz` retains IPO
+and delisting dates from the listing source. Conflicting provider mappings are
+written as separate evidence rows with `conflict=true`; they are never resolved
+silently.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

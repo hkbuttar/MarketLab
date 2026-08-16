@@ -104,6 +104,19 @@ missing symbols in an adjacent metadata file. Output is streamed through a
 `.part` file and finalized atomically so an interruption cannot masquerade as a
 complete dataset.
 
+## SEC submissions index
+
+Build the ticker-to-CIK mapping and point-in-time 10-K/10-Q filing index without
+extracting the large submissions archive:
+
+```bash
+python scripts/process_sec_submissions.py
+```
+
+The resulting `data/processed/sec/submissions_index.zip` contains compressed
+`registrants.csv` and `filings.csv` members. Filing acceptance timestamps are
+retained so later fundamental joins can enforce historical availability.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

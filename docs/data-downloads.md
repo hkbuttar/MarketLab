@@ -380,6 +380,19 @@ prices, applies the standard price/liquidity screen and cross-sectional 1%/99%
 winsorization, and reports every grid point without selecting a winner. Summary
 and Sharpe heatmap CSVs are written under `reports/validation/sensitivity/`.
 
+Replay realized gross strategy paths under 0, 5, 10, 25, and 50 bps all-in
+cost assumptions:
+
+```bash
+python scripts/run_cost_sensitivity.py
+```
+
+Each scenario applies its fixed cost to realized traded notional instead of
+stacking it on the baseline commission/spread/impact model. A strategy is
+explicitly labeled economically attractive when its net CAGR is positive and
+its net Sharpe is at least 0.5. Detailed and threshold summaries are written to
+the sensitivity report directory.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

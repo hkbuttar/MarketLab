@@ -269,6 +269,22 @@ Each strategy selects its top score quintile, remains fully invested, caps each
 position at 5%, and limits one-way monthly turnover to 20%. Equal and
 score-proportional weighting are both supported by the reusable constructor.
 
+## Executable rebalance trades
+
+Translate monthly target weights into next-session-open whole-share fills:
+
+```bash
+python scripts/generate_trades.py
+```
+
+The simulator sells before buying, enforces available cash, suppresses trades
+below $1,000, exits residual targets below one basis point, caps each order at
+10% of trailing dollar volume, and records commission, half-spread, and nonlinear
+market-impact costs without using the signal-day close as an execution price.
+Large discontinuities in the adjusted-to-unadjusted price factor are applied as
+split multipliers before holdings are valued; small dividend-related adjustment
+changes are deliberately ignored.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

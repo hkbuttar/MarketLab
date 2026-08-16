@@ -504,6 +504,21 @@ spread, gross and net CAGR, risk-free-adjusted Sharpe, turnover, a transparent
 with matching 21-session SPY returns. Monthly diagnostics and the model summary
 are written under `reports/ml/`.
 
+## ML explainability
+
+Refit every purged fold and calculate out-of-sample permutation and SHAP
+importance:
+
+```bash
+python scripts/explain_ml_models.py
+```
+
+Permutation importance uses rank IC as its scorer. Actual SHAP values are
+calculated with linear and tree explainers on deterministic OOS subsamples. The
+time-by-feature matrix and stability summary report mean importance, dispersion,
+and the fraction of test years in which each predictor ranked among the top
+three. Outputs are written under `reports/ml/explainability/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

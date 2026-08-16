@@ -83,6 +83,27 @@ large; the downloader streams them to `.part` files, verifies the ZIP signature,
 checks advertised size against available disk space, and atomically finalizes
 successful snapshots. Keep them out of Git and retain their raw ZIP snapshots.
 
+## Processed prices
+
+Test the canonical price pipeline on a small symbol subset first:
+
+```bash
+python scripts/process_prices.py --max-symbols 5 \
+  --output data/processed/prices/prices_sample.csv.gz
+```
+
+Then build the complete gzip-compressed CSV dataset:
+
+```bash
+python scripts/process_prices.py
+```
+
+The processor selects the latest immutable snapshot for each intended common
+equity and benchmark, normalizes it to the canonical price schema, and records
+missing symbols in an adjacent metadata file. Output is streamed through a
+`.part` file and finalized atomically so an interruption cannot masquerade as a
+complete dataset.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

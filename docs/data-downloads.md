@@ -462,6 +462,21 @@ early-stopping splits so chronological validation remains controlled by the
 walk-forward engine. Neural networks and unregistered model families are
 outside the project scope.
 
+## Standard walk-forward ML
+
+Run strict expanding-window yearly training:
+
+```bash
+python scripts/run_walk_forward_ml.py
+```
+
+The first fold trains on 2013–2017 and predicts 2018. Each subsequent fold adds
+the completed test year to training and predicts the next calendar year through
+2026. Models, imputers, and scalers are refit only on each training window, and
+the compressed output contains only out-of-sample predictions. This dataset is
+explicitly marked as standard, unpurged walk-forward; overlapping-label purging
+and embargo are implemented in the following validation step.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

@@ -315,6 +315,21 @@ The command writes `reports/performance/performance_summary.json` and
 risk-free rate; pass `--risk-free-rate 0.04`, for example, to use a constant 4%
 annual assumption until the daily Treasury series is integrated.
 
+## Factor attribution
+
+Download the daily U.S. Fama-French five factors and momentum factor from the
+Kenneth French Data Library, then regress net strategy returns on them:
+
+```bash
+python scripts/download_french_factors.py
+python scripts/build_factor_attribution.py
+```
+
+The canonical factor file is stored under `data/raw/factors/`. The attribution
+report at `reports/attribution/factor_regression.json` contains annualized alpha,
+market, size, value, profitability, investment and momentum betas, classical
+OLS standard errors, observation counts, and R-squared.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

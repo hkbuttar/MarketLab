@@ -285,6 +285,22 @@ Large discontinuities in the adjusted-to-unadjusted price factor are applied as
 split multipliers before holdings are valued; small dividend-related adjustment
 changes are deliberately ignored.
 
+## Daily backtest valuation
+
+Chain monthly targets into daily gross and net NAV using adjusted-price total
+returns and realized execution costs:
+
+```bash
+python scripts/run_backtest.py
+```
+
+Targets activate on the next SPY session. Missing execution histories remain
+cash; a security that delists during a holding period receives a one-time 70%
+recovery of its last marked value. The engine records gross NAV, net NAV, daily
+return, SPY benchmark NAV, and cumulative costs for each strategy. Exchange test
+instruments identified by the security reference data are excluded from
+valuation.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

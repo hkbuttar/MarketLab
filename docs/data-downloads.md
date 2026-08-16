@@ -341,6 +341,20 @@ Outputs are written under `reports/attribution/`. Every summary records that
 Alpha Vantage classifications are current labels without historical effective
 dates; they are not represented as point-in-time GICS classifications.
 
+## Market regimes
+
+Classify SPY sessions into bull/bear and high/low-volatility states:
+
+```bash
+python scripts/classify_regimes.py
+```
+
+The classifier compares adjusted SPY price with its trailing 200-session mean
+and 21-session realized volatility with the median of the preceding 252
+volatility observations. The volatility threshold is lagged one session, so no
+future observation affects an existing label. Results and methodology metadata
+are written under `data/features/regimes/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

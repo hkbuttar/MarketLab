@@ -217,6 +217,20 @@ the smaller fundamental feature file with:
 python scripts/build_features.py --skip-technical
 ```
 
+## Monthly factor research
+
+Build month-end cross-sectional ranks, quintiles, forward 21-session returns,
+and Spearman information coefficients:
+
+```bash
+python scripts/run_factor_research.py
+```
+
+Every cross-section is anchored to SPY's shared month-end trading calendar.
+Fundamental features are joined only when their acceptance date precedes the
+rebalance date. Yearly temporary staging keeps memory bounded and is removed
+after the atomic panel and diagnostic outputs are finalized.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

@@ -174,6 +174,16 @@ duplicate fundamental keys, filing chronology, numeric validity, missingness,
 and cross-dataset symbol coverage. It writes the complete result atomically to
 `reports/data_validation.json` and exits nonzero when critical errors exist.
 
+Quarantine invalid provider observations without modifying the original dataset:
+
+```bash
+python scripts/clean_prices.py
+```
+
+This writes research-safe observations to
+`data/processed/prices/prices_clean.csv.gz` and preserves every rejected row,
+with deterministic reason codes, in `reports/price_quarantine.csv.gz`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

@@ -73,29 +73,38 @@ def _validate_prices(path: Path) -> tuple[dict[str, object], set[str]]:
             if previous_date and date <= previous_date:
                 _record(errors, examples, "duplicate_or_unsorted_key", row)
             previous_date = date
-            try:
-                open_price = float(row["open"])
-                high = float(row["high"])
-                low = float(row["low"])
-                close = float(row["close"])
-                adjusted = float(row["adjusted_close"])
-                volume = float(row["volume"])
-            except ValueError:
-                _record(errors, examples, "invalid_numeric_value", row)
-                continue
-            values = (open_price, high, low, close, adjusted, volume)
-            if not all(math.isfinite(value) for value in values):
-                _record(errors, examples, "non_finite_value", row)
-            if min(open_price, high, low, close, adjusted) <= 0 or volume < 0:
-                _record(errors, examples, "non_positive_price_or_volume", row)
-            if low > min(open_price, close) or high < max(open_price, close):
-                _record(errors, examples, "invalid_ohlc_relationship", row)
+            for issue in price_row_issues(row):
+                _record(errors, examples, issue, row)
     return {
         "rows": rows,
         "symbols": len(symbols),
         "errors": dict(errors),
         "examples": examples,
     }, symbols
+
+
+def price_row_issues(row: dict[str, str]) -> list[str]:
+    """Return deterministic reason codes for an invalid canonical price row."""
+
+    try:
+        open_price = float(row["open"])
+        high = float(row["high"])
+        low = float(row["low"])
+        close = float(row["close"])
+        adjusted = float(row["adjusted_close"])
+        volume = float(row["volume"])
+    except (KeyError, ValueError):
+        return ["invalid_numeric_value"]
+    values = (open_price, high, low, close, adjusted, volume)
+    issues: list[str] = []
+    if not all(math.isfinite(value) for value in values):
+        issues.append("non_finite_value")
+        return issues
+    if min(open_price, high, low, close, adjusted) <= 0 or volume < 0:
+        issues.append("non_positive_price_or_volume")
+    if low > min(open_price, close) or high < max(open_price, close):
+        issues.append("invalid_ohlc_relationship")
+    return issues
 
 
 def _validate_fundamentals(path: Path) -> tuple[dict[str, object], set[str]]:

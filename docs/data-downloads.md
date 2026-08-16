@@ -423,6 +423,20 @@ count, skewness, and kurtosis. The JSON report preserves raw Sharpe, adjusted
 probability, evidence label, and number of trials at
 `reports/validation/deflated_sharpe.json`.
 
+## MarketLab robustness diagnostic
+
+Combine five separately reported validation components into the internal score:
+
+```bash
+python scripts/build_robustness_scores.py
+```
+
+The weights are 30% chronological final-20% holdout performance, 20% cost
+resilience, 20% parameter stability, 15% regime stability, and 15% bootstrap
+confidence. This is explicitly a MarketLab diagnostic, not an industry-standard
+statistic. The JSON methodology preserves every transformation and component;
+CSV and JSON results are written under `reports/validation/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

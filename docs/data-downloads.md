@@ -477,6 +477,18 @@ the compressed output contains only out-of-sample predictions. This dataset is
 explicitly marked as standard, unpurged walk-forward; overlapping-label purging
 and embargo are implemented in the following validation step.
 
+Run the 21-session-purged, five-session-embargoed comparison:
+
+```bash
+python scripts/run_purged_walk_forward_ml.py
+```
+
+Before every yearly fit, the engine removes training observations whose forward
+label interval reaches the embargo boundary preceding the test year. It refits
+the same three models, writes a separate compressed prediction artifact, and
+compares standard versus purged mean monthly rank IC and top-quintile realized
+return at `reports/ml/walk_forward_purging_comparison.json`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

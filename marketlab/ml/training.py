@@ -9,6 +9,7 @@ import numpy as np
 
 from marketlab.ml.dataset import FEATURE_COLUMNS, ML_DATASET_COLUMNS
 from marketlab.ml.models import MODEL_NAMES, create_ranking_model
+from marketlab.validation.purging import load_benchmark_calendar, purged_train_indices
 
 MODEL_FEATURE_COLUMNS = (
     *FEATURE_COLUMNS,
@@ -35,6 +36,9 @@ def run_walk_forward_training(
     train_start_year: int = 2013,
     first_test_year: int = 2018,
     random_state: int = 1729,
+    purge_calendar_path: Path | None = None,
+    label_horizon_sessions: int = 21,
+    embargo_sessions: int = 5,
 ) -> dict[str, object]:
     """Fit expanding yearly folds and atomically write out-of-sample predictions."""
 
@@ -44,6 +48,22 @@ def run_walk_forward_training(
         train_start_year=train_start_year,
         first_test_year=first_test_year,
     )
+    calendar = (
+        load_benchmark_calendar(purge_calendar_path) if purge_calendar_path else None
+    )
+    if calendar:
+        for fold in folds:
+            original = fold["train_indices"]
+            test_start = str(data["dates"][fold["test_indices"][0]])
+            fold["train_indices"] = purged_train_indices(
+                data["dates"],
+                original,
+                test_start,
+                calendar,
+                label_horizon_sessions=label_horizon_sessions,
+                embargo_sessions=embargo_sessions,
+            )
+            fold["purged_rows"] = len(original) - len(fold["train_indices"])
     if not folds:
         raise ValueError("dataset contains no eligible walk-forward folds")
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -87,6 +107,7 @@ def run_walk_forward_training(
                         "train_end": fold["train_end"],
                         "train_rows": len(train_indices),
                         "test_rows": len(test_indices),
+                        "purged_rows": fold.get("purged_rows", 0),
                     }
                 )
         partial.replace(output_path)
@@ -94,8 +115,14 @@ def run_walk_forward_training(
         partial.unlink(missing_ok=True)
         raise
     metadata: dict[str, object] = {
-        "method": "standard expanding-window walk-forward",
-        "purged": False,
+        "method": (
+            "purged expanding-window walk-forward"
+            if calendar
+            else "standard expanding-window walk-forward"
+        ),
+        "purged": bool(calendar),
+        "label_horizon_sessions": label_horizon_sessions if calendar else 0,
+        "embargo_sessions": embargo_sessions if calendar else 0,
         "models": list(model_names),
         "features": list(MODEL_FEATURE_COLUMNS),
         "target": "target_return_rank",

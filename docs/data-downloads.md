@@ -393,6 +393,21 @@ explicitly labeled economically attractive when its net CAGR is positive and
 its net Sharpe is at least 0.5. Detailed and threshold summaries are written to
 the sensitivity report directory.
 
+## Bootstrap robustness
+
+Estimate sampling uncertainty with a seeded 21-session moving-block bootstrap:
+
+```bash
+python scripts/run_bootstrap_analysis.py
+```
+
+The default 1,000 paired resamples preserve short-run return dependence and the
+contemporaneous relationship between each strategy, SPY, and the daily
+risk-free rate. The report includes 95% percentile intervals for CAGR, Sharpe,
+Sortino, and maximum drawdown, plus `P(Sharpe > 0)` and
+`P(CAGR > benchmark)`. Summary JSON and compressed samples are written under
+`reports/validation/bootstrap/`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

@@ -231,6 +231,19 @@ Fundamental features are joined only when their acceptance date precedes the
 rebalance date. Yearly temporary staging keeps memory bounded and is removed
 after the atomic panel and diagnostic outputs are finalized.
 
+## Investable factor preprocessing
+
+Apply a $5 minimum price, $1 million trailing 21-session average dollar-volume
+screen, and cross-sectional 1st/99th percentile winsorization:
+
+```bash
+python scripts/preprocess_factor_research.py
+```
+
+The original factor panel remains unchanged. The investable panel and its IC and
+quintile diagnostics use only exact shared month-end prices and winsorized
+forward returns, while missing factor values remain missing rather than imputed.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

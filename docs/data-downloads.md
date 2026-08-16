@@ -408,6 +408,21 @@ Sortino, and maximum drawdown, plus `P(Sharpe > 0)` and
 `P(CAGR > benchmark)`. Summary JSON and compressed samples are written under
 `reports/validation/bootstrap/`.
 
+## Multiple-testing adjustment
+
+Adjust primary-strategy Sharpe evidence for every recorded parameter trial:
+
+```bash
+python scripts/run_deflated_sharpe.py
+```
+
+The Deflated Sharpe calculation records the 18 neighboring parameter variants
+and three primary strategies as 21 trials. It estimates the expected maximum
+Sharpe under repeated testing and adjusts each strategy using its observation
+count, skewness, and kurtosis. The JSON report preserves raw Sharpe, adjusted
+probability, evidence label, and number of trials at
+`reports/validation/deflated_sharpe.json`.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

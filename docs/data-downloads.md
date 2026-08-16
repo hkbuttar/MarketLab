@@ -160,6 +160,20 @@ and delisting dates from the listing source. Conflicting provider mappings are
 written as separate evidence rows with `conflict=true`; they are never resolved
 silently.
 
+## Processed-data validation
+
+Run the complete streaming validation after generating prices and point-in-time
+fundamentals:
+
+```bash
+python scripts/validate_processed_data.py
+```
+
+The command checks canonical columns, price ordering and OHLC relationships,
+duplicate fundamental keys, filing chronology, numeric validity, missingness,
+and cross-dataset symbol coverage. It writes the complete result atomically to
+`reports/data_validation.json` and exits nonzero when critical errors exist.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

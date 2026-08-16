@@ -50,7 +50,7 @@ After loading `.env`, run a small end-to-end provider test:
 python scripts/download_v1_v2_data.py --max-symbols 5
 ```
 
-The complete active-and-delisted U.S. stock run is resumable:
+The complete active-and-delisted U.S. common-equity run is resumable:
 
 ```bash
 python scripts/download_v1_v2_data.py
@@ -58,7 +58,9 @@ python scripts/download_v1_v2_data.py
 
 It stays below a 75-request/minute subscription by defaulting to 70 requests per
 minute. Rerunning skips existing symbol/endpoint snapshots and records failures
-in a manifest under `data/raw/`.
+in a manifest under `data/raw/`. Alpha Vantage categorizes preferred shares,
+warrants, rights, and units as `Stock`; MarketLab excludes those instruments by
+security name and symbol pattern while retaining legitimate common share classes.
 
 ## Filing-aware fundamentals
 

@@ -22,6 +22,14 @@ from marketlab.data.downloaders.alpha_vantage import RawHttpResponse
 
 BENCHMARKS = ("SPY", "QQQ", "IWM")
 VALID_SYMBOL = re.compile(r"^[A-Z][A-Z0-9.-]*$")
+NON_COMMON_SECURITY_NAME = re.compile(
+    r"\b("
+    r"warrants?|wts?|rights?|rts?|units?|preferred|preference|pfd|"
+    r"depositary|debentures?|bonds?|notes? due"
+    r")\b",
+    re.IGNORECASE,
+)
+PREFERRED_SYMBOL = re.compile(r"-P(?:-|$)")
 
 
 class RateLimiter:
@@ -73,9 +81,21 @@ def listed_stock_symbols(paths: Iterable[Path]) -> list[str]:
         with path.open(newline="", encoding="utf-8-sig") as file:
             for row in csv.DictReader(file):
                 symbol = row.get("symbol", "").strip().upper()
-                if row.get("assetType") == "Stock" and VALID_SYMBOL.fullmatch(symbol):
+                name = row.get("name", "")
+                if is_common_equity(symbol, name, row.get("assetType", "")):
                     symbols.add(symbol)
     return sorted(symbols)
+
+
+def is_common_equity(symbol: str, name: str, asset_type: str) -> bool:
+    """Apply a conservative common-equity screen to provider listings."""
+
+    return bool(
+        asset_type == "Stock"
+        and VALID_SYMBOL.fullmatch(symbol)
+        and not PREFERRED_SYMBOL.search(symbol)
+        and not NON_COMMON_SECURITY_NAME.search(name)
+    )
 
 
 def snapshot_exists(raw_root: Path, category: str, stem: str, suffix: str) -> bool:

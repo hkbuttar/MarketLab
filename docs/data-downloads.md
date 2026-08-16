@@ -198,6 +198,19 @@ The result is written to
 close with the historically reported share count preserves the economic market
 capitalization at that time; no future trading date is used.
 
+## Research features
+
+Build daily technical features and filing-date fundamental ratios:
+
+```bash
+python scripts/build_features.py
+```
+
+Technical features include adjusted returns, 21/63/126/252-session momentum,
+12-to-1 momentum, annualized 21/63-session volatility, and 21-session average
+dollar volume. Fundamental features include valuation, profitability, leverage,
+and free-cash-flow ratios keyed to the original availability timestamp.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

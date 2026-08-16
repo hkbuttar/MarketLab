@@ -244,6 +244,18 @@ The original factor panel remains unchanged. The investable panel and its IC and
 quintile diagnostics use only exact shared month-end prices and winsorized
 forward returns, while missing factor values remain missing rather than imputed.
 
+## Factor tear sheet
+
+Summarize IC consistency, rolling 12-month IC, quintile monotonicity and spreads,
+top-quintile turnover, and average cross-sectional factor correlations:
+
+```bash
+python scripts/build_factor_tear_sheet.py
+```
+
+The resulting JSON and CSV diagnostics are written under `reports/factors/` and
+are derived exclusively from the screened, winsorized investable panel.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

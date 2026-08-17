@@ -9,6 +9,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from backend.schemas.factor_lab import DatedValue, FactorLabResult, NamedValue
+from marketlab.factors.research import FACTOR_NAMES
 
 FACTOR_ROOT = Path("reports/factors")
 PANEL_PATH = Path("data/features/factors/monthly_panel_investable.csv.gz")
@@ -20,13 +21,10 @@ SECTOR_NOTE = (
 
 
 def available_factors(root: Path = FACTOR_ROOT) -> list[str]:
-    """Return factors present in the investable-universe IC artifact."""
+    """Return registered factors independently of local generated artifacts."""
 
-    path = root / "information_coefficients_investable.csv"
-    if not path.is_file():
-        return []
-    with path.open(encoding="utf-8", newline="") as file:
-        return sorted({row["factor"] for row in csv.DictReader(file)})
+    del root
+    return sorted(FACTOR_NAMES)
 
 
 def factor_lab_result(

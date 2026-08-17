@@ -92,7 +92,11 @@ def _recent_experiments(root: Path) -> list[RecentExperiment]:
 
 def _recent_reports(root: Path) -> list[RecentReport]:
     files = sorted(
-        (path for path in root.rglob("*") if path.is_file()),
+        (
+            path
+            for path in root.rglob("*")
+            if path.is_file() and not path.name.startswith(".")
+        ),
         key=lambda path: path.stat().st_mtime,
         reverse=True,
     )

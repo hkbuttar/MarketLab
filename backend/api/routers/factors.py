@@ -37,5 +37,9 @@ def get_factor_result(
         return factor_lab_result(factor, start_date.isoformat(), end_date.isoformat())
     except KeyError as error:
         raise HTTPException(status_code=404, detail="factor not found") from error
+    except FileNotFoundError as error:
+        raise HTTPException(
+            status_code=503, detail="factor research artifacts are unavailable"
+        ) from error
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error

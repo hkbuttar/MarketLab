@@ -540,6 +540,23 @@ parameters, Git revision and dirty state, reported metrics, and SHA-256 digest
 and byte size of every input and output artifact. This makes changes in either
 code or local research data visible when two runs are compared.
 
+## Experiment metadata database
+
+MarketLab stores compact experiment metadata in PostgreSQL while retaining
+large predictions, returns, and other time series as fingerprinted file
+artifacts. Configure the database and create the six metadata tables with:
+
+```bash
+export MARKETLAB_DATABASE_URL='postgresql+psycopg://marketlab:marketlab@localhost:5434/marketlab'
+python scripts/create_database_schema.py
+```
+
+The Docker Compose development database binds to port 5434 to avoid collisions
+with other local PostgreSQL installations. The URL has no source-code default
+and production credentials should be kept in the local `.env`, never committed.
+Schema creation is idempotent; later structural changes will use versioned
+migrations rather than destructive table recreation.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

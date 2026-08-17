@@ -11,6 +11,7 @@ def test_compose_defines_health_gated_product_stack() -> None:
     assert "condition: service_healthy" in compose
     assert "MARKETLAB_DATABASE_URL" in compose
     assert "./data:/app/data" in compose
+    assert "python -m scripts.create_database_schema" in compose
 
 
 def test_images_do_not_copy_local_research_artifacts() -> None:
@@ -19,3 +20,6 @@ def test_images_do_not_copy_local_research_artifacts() -> None:
     assert {"data", "experiments", "reports"} <= set(ignored)
     assert Path("docker/backend.Dockerfile").is_file()
     assert Path("docker/frontend.Dockerfile").is_file()
+    assert "PYTHONPATH=/app" in Path("docker/backend.Dockerfile").read_text(
+        encoding="utf-8"
+    )

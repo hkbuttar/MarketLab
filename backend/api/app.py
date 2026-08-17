@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.routers import ROUTERS
+from marketlab import __version__
 
 
 def create_app() -> FastAPI:
@@ -12,7 +13,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="MarketLab API",
         description="Quantitative research and strategy validation API.",
-        version="0.1.0",
+        version=__version__,
     )
     app.add_middleware(
         CORSMiddleware,

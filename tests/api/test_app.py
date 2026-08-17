@@ -56,7 +56,7 @@ def test_openapi_metadata_and_versioned_routes() -> None:
     assert response.status_code == 200
     document = response.json()
     assert document["info"]["title"] == "MarketLab API"
-    assert document["info"]["version"] == "0.1.0"
+    assert document["info"]["version"] == "1.0.0"
     assert "/api/v1/backtests" in document["paths"]
 
 

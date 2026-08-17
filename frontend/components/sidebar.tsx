@@ -26,7 +26,7 @@ export function Sidebar({ active, connected }: { active: string; connected: bool
       </nav>
       <div className="sidebar-foot">
         <span className={connected ? "status-dot online" : "status-dot"} />
-        <div><strong>{connected ? "Research engine online" : "API unavailable"}</strong><small>FastAPI · v0.1</small></div>
+        <div><strong>{connected ? "Research engine online" : "API unavailable"}</strong><small>FastAPI · v1.0</small></div>
       </div>
     </aside>
   );

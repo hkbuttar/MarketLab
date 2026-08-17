@@ -1,4 +1,7 @@
 # MarketLab — Quantitative Research, Backtesting & Strategy Validation Platform
+
+**Release:** `v1.0.0`
+
 MarketLab is a full-stack quantitative research platform for factor analysis,
 systematic strategy construction, realistic portfolio backtesting,
 transaction-cost and capacity modeling, factor attribution, regime analysis,

@@ -23,3 +23,15 @@ def test_images_do_not_copy_local_research_artifacts() -> None:
     assert "PYTHONPATH=/app" in Path("docker/backend.Dockerfile").read_text(
         encoding="utf-8"
     )
+
+
+def test_ci_verifies_python_and_frontend_builds() -> None:
+    workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert "python-quality:" in workflow
+    assert "frontend-quality:" in workflow
+    assert 'node-version: "22"' in workflow
+    assert "cache-dependency-path: frontend/package-lock.json" in workflow
+    assert "run: npm ci" in workflow
+    assert "run: npm run typecheck" in workflow
+    assert "run: npm run build" in workflow

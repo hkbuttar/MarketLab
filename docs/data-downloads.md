@@ -569,6 +569,19 @@ and production credentials should be kept in the local `.env`, never committed.
 Schema creation is idempotent; later structural changes will use versioned
 migrations rather than destructive table recreation.
 
+## Development API
+
+Start the versioned FastAPI application locally with:
+
+```bash
+uvicorn backend.api.app:app --reload
+```
+
+The health check is available at `http://127.0.0.1:8000/health`, interactive
+OpenAPI documentation at `http://127.0.0.1:8000/docs`, and quantitative routes
+under `/api/v1`. Application import does not connect to PostgreSQL or external
+data providers, keeping startup and API tests deterministic.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

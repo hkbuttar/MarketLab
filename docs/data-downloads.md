@@ -590,6 +590,35 @@ completion and the compact summary. Runs execute through
 `marketlab.backtest.run_daily_backtest` in a FastAPI background task, while
 their detailed daily results remain file artifacts.
 
+## Next.js research dashboard
+
+Run the API and dashboard in separate terminals:
+
+```bash
+uvicorn backend.api.app:app --reload
+```
+
+```bash
+cd frontend
+cp .env.example .env.local
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`. The App Router dashboard loads one server-side
+summary from FastAPI and displays recent experiments, factor IC research, the
+best purged out-of-sample model Sharpe, average strategy robustness, and recent
+report artifacts. If the API is unavailable, the page renders an explicit
+offline state rather than invented or stale research values.
+
+The Factor Lab is available at `http://localhost:3000/factors`. It queries the
+persisted investable-universe research through `/api/v1/factors`, supports an
+explicit factor and date window, and holds the current dataset definition fixed
+at a 21-session forward horizon. It presents IC history, quantile returns,
+top-quintile turnover, cross-factor correlations, and top-quintile sector
+composition. Sector composition is clearly labeled as using current Alpha
+Vantage classifications rather than historically effective GICS membership.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

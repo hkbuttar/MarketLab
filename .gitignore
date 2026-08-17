@@ -13,6 +13,9 @@ dist/
 build/
 node_modules/
 frontend/dist/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
 
 # Generated research artifacts and local datasets
 data/raw/**

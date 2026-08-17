@@ -210,3 +210,25 @@ h2 { font-size: 23px; letter-spacing: -.02em; }
 .job-panel span { color: var(--muted); font-size: 10px; }
 @media (max-width: 850px) { .builder-grid { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .field-pair { grid-template-columns: 1fr; } .job-panel { align-items: flex-start; flex-direction: column; gap: 12px; } }
+
+.ml-summary { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); margin-bottom: 16px; }
+.model-list { display: grid; gap: 16px; }
+.model-metrics { display: grid; gap: 10px; grid-template-columns: repeat(6, 1fr); margin-bottom: 23px; }
+.model-metrics div { background: #f0f0e8; border-radius: 7px; padding: 12px; }
+.model-metrics span { color: var(--muted); display: block; font-size: 8px; margin-bottom: 8px; text-transform: uppercase; }
+.model-metrics strong { font: 500 18px Georgia, serif; }
+.model-detail-grid { border-top: 1px solid var(--line); display: grid; gap: 34px; grid-template-columns: 1.2fr .8fr; padding-top: 20px; }
+.model-detail-grid h3 { font: 500 16px Georgia, serif; margin: 0 0 16px; }
+.importance-list { display: grid; gap: 11px; }
+.importance-list > div { align-items: center; display: grid; font-size: 9px; gap: 10px; grid-template-columns: 125px 1fr 40px; }
+.importance-list i { background: #e3e5dd; border-radius: 6px; height: 6px; overflow: hidden; }
+.importance-list b { background: var(--forest); display: block; height: 100%; }
+.importance-list strong { font-family: ui-monospace, monospace; text-align: right; }
+.validation-note { background: #e7eddf; border-radius: 9px; padding: 16px; }
+.validation-note dl { display: grid; margin: 0; }
+.validation-note dl div { border-top: 1px solid #cbd3c6; display: flex; font-size: 9px; justify-content: space-between; padding: 10px 0; }
+.validation-note dl div:first-child { border-top: 0; padding-top: 0; }
+.validation-note dd { font-family: ui-monospace, monospace; font-weight: 800; margin: 0; }
+.ml-method { margin-top: 16px; }
+@media (max-width: 1000px) { .model-metrics { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px) { .ml-summary, .model-detail-grid { grid-template-columns: 1fr; } .model-metrics { grid-template-columns: repeat(2, 1fr); } }

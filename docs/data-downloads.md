@@ -225,6 +225,13 @@ delay. It is discoverable through `GET /api/v1/strategies`. It is intentionally
 excluded from the existing monthly target artifact until the expanded technical
 dataset and weekly research panel are regenerated.
 
+Portfolio construction also supports capped inverse-volatility weights through
+`construct_weights(..., method="inverse_volatility", risks=...)`. Optional
+portfolio volatility targeting scales a fully invested long-only allocation
+toward an annual target, records residual cash when exposure is reduced, and
+permits leverage only when explicitly enabled. Both gross leverage and the
+post-scaling maximum position can be capped.
+
 ## Monthly factor research
 
 Build month-end cross-sectional ranks, quintiles, forward 21-session returns,

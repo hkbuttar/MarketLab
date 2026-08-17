@@ -31,7 +31,7 @@ class StrategyConfig:
             raise ValueError("strategy requires at least one factor")
         if not 0 < self.selection_fraction <= 1:
             raise ValueError("selection_fraction must be in (0, 1]")
-        if self.weighting not in {"equal", "score"}:
+        if self.weighting not in {"equal", "score", "inverse_volatility"}:
             raise ValueError("unsupported weighting method")
         if not 0 < self.maximum_position <= 1:
             raise ValueError("maximum_position must be in (0, 1]")

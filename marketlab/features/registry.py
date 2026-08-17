@@ -23,6 +23,15 @@ FEATURES = {
         FeatureDefinition(
             "momentum_12_1", "technical", "252-to-21-session adjusted return."
         ),
+        FeatureDefinition("trend_sma_50", "technical", "Price / SMA50 - 1."),
+        FeatureDefinition("trend_sma_200", "technical", "Price / SMA200 - 1."),
+        FeatureDefinition("trend_sma_50_200", "technical", "SMA50 / SMA200 - 1."),
+        FeatureDefinition("return_5d", "technical", "Five-session adjusted return."),
+        FeatureDefinition(
+            "return_20d_zscore",
+            "technical",
+            "Twenty-session return standardized against trailing observations.",
+        ),
         FeatureDefinition(
             "volatility_21", "technical", "Annualized 21-session volatility."
         ),

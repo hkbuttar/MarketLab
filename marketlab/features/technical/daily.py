@@ -18,6 +18,11 @@ TECHNICAL_COLUMNS = (
     "momentum_126",
     "momentum_252",
     "momentum_12_1",
+    "trend_sma_50",
+    "trend_sma_200",
+    "trend_sma_50_200",
+    "return_5d",
+    "return_20d_zscore",
     "volatility_21",
     "volatility_63",
     "average_dollar_volume_21",
@@ -66,8 +71,10 @@ def build_daily_technical_features(source: Path, output: Path) -> dict[str, int]
 class _RollingState:
     def __init__(self) -> None:
         self.prices: deque[float] = deque(maxlen=253)
+        self.price_averages = {50: _RollingMoments(50), 200: _RollingMoments(200)}
         self.returns_21 = _RollingMoments(21)
         self.returns_63 = _RollingMoments(63)
+        self.returns_20d = _RollingMoments(252)
         self.dollar_volume: deque[float] = deque(maxlen=21)
         self.dollar_volume_sum = 0.0
 
@@ -78,6 +85,8 @@ class _RollingState:
         previous = self.prices[-1] if self.prices else None
         daily_return = adjusted / previous - 1 if previous else None
         self.prices.append(adjusted)
+        for average in self.price_averages.values():
+            average.append(adjusted)
         if daily_return is not None:
             self.returns_21.append(daily_return)
             self.returns_63.append(daily_return)
@@ -86,6 +95,9 @@ class _RollingState:
             self.dollar_volume_sum -= self.dollar_volume[0]
         self.dollar_volume.append(dollar)
         self.dollar_volume_sum += dollar
+        return_20d = self._momentum(20)
+        if return_20d is not None:
+            self.returns_20d.append(return_20d)
         return {
             "date": row["date"],
             "symbol": row["symbol"],
@@ -95,6 +107,11 @@ class _RollingState:
             "momentum_126": _number(self._momentum(126)),
             "momentum_252": _number(self._momentum(252)),
             "momentum_12_1": _number(self._momentum_12_1()),
+            "trend_sma_50": _number(self._price_to_sma(50)),
+            "trend_sma_200": _number(self._price_to_sma(200)),
+            "trend_sma_50_200": _number(self._sma_spread()),
+            "return_5d": _number(self._momentum(5)),
+            "return_20d_zscore": _number(self._return_20d_zscore()),
             "volatility_21": _number(self.returns_21.volatility()),
             "volatility_63": _number(self.returns_63.volatility()),
             "average_dollar_volume_21": _number(
@@ -111,6 +128,22 @@ class _RollingState:
         if len(self.prices) < 253:
             return None
         return self.prices[-22] / self.prices[0] - 1
+
+    def _price_to_sma(self, sessions: int) -> float | None:
+        average = self.price_averages[sessions].mean(minimum=sessions)
+        if average is None:
+            return None
+        return self.prices[-1] / average - 1
+
+    def _sma_spread(self) -> float | None:
+        short = self.price_averages[50].mean(minimum=50)
+        long = self.price_averages[200].mean(minimum=200)
+        if short is None or long is None:
+            return None
+        return short / long - 1
+
+    def _return_20d_zscore(self) -> float | None:
+        return self.returns_20d.zscore(minimum=20)
 
 
 class _RollingMoments:
@@ -136,6 +169,24 @@ class _RollingMoments:
             self.window - 1
         )
         return math.sqrt(max(variance, 0) * 252)
+
+    def mean(self, *, minimum: int = 1) -> float | None:
+        """Return the rolling mean once the requested history is available."""
+
+        return self.total / len(self.values) if len(self.values) >= minimum else None
+
+    def zscore(self, *, minimum: int) -> float | None:
+        """Standardize the latest observation against the backward-looking window."""
+
+        count = len(self.values)
+        if count < minimum:
+            return None
+        mean = self.total / count
+        variance = (self.total_squared - self.total * self.total / count) / (count - 1)
+        standard_deviation = math.sqrt(max(variance, 0.0))
+        return (
+            (self.values[-1] - mean) / standard_deviation if standard_deviation else 0.0
+        )
 
 
 def _number(value: float | None) -> str:

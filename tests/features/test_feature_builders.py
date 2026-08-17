@@ -4,6 +4,8 @@ import csv
 import gzip
 from pathlib import Path
 
+import pytest
+
 from marketlab.data.schemas import FUNDAMENTAL_COLUMNS, PRICE_COLUMNS
 from marketlab.features.fundamental import build_fundamental_features
 from marketlab.features.technical import build_daily_technical_features
@@ -25,6 +27,29 @@ def test_builds_returns_without_crossing_symbols(tmp_path: Path) -> None:
         rows = list(csv.DictReader(file))
     assert rows[1]["return_1d"] == "0.1"
     assert rows[2]["return_1d"] == ""
+
+
+def test_builds_backward_looking_trend_and_reversal_features(tmp_path: Path) -> None:
+    source = tmp_path / "history.csv.gz"
+    with gzip.open(source, "wt", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=PRICE_COLUMNS)
+        writer.writeheader()
+        for index in range(220):
+            writer.writerow(_price(f"2024-{index + 1:03}", "AAA", index + 1))
+    output = tmp_path / "technical.csv.gz"
+
+    build_daily_technical_features(source, output)
+
+    with gzip.open(output, "rt", encoding="utf-8", newline="") as file:
+        rows = list(csv.DictReader(file))
+    assert rows[4]["return_5d"] == ""
+    assert rows[5]["return_5d"] == "5"
+    assert rows[48]["trend_sma_50"] == ""
+    assert float(rows[49]["trend_sma_50"]) == pytest.approx(50 / 25.5 - 1)
+    assert rows[198]["trend_sma_200"] == ""
+    assert float(rows[199]["trend_sma_200"]) == pytest.approx(200 / 100.5 - 1)
+    assert rows[38]["return_20d_zscore"] == ""
+    assert rows[39]["return_20d_zscore"] != ""
 
 
 def test_builds_fundamental_ratios(tmp_path: Path) -> None:

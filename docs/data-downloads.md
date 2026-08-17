@@ -206,9 +206,10 @@ Build daily technical features and filing-date fundamental ratios:
 python scripts/build_features.py
 ```
 
-Technical features include adjusted returns, 21/63/126/252-session momentum,
-12-to-1 momentum, annualized 21/63-session volatility, and 21-session average
-dollar volume. Fundamental features include valuation, profitability, leverage,
+Technical features include adjusted returns, 5/21/63/126/252-session momentum,
+12-to-1 momentum, price distance from SMA50 and SMA200, the SMA50/SMA200 spread,
+a trailing 20-session return z-score, annualized 21/63-session volatility, and
+21-session average dollar volume. Fundamental features include valuation, profitability, leverage,
 free-cash-flow ratios, and same-period year-over-year growth keyed to the
 original availability timestamp. After quarterly normalization, rebuild only
 the smaller fundamental feature file with:

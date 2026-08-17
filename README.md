@@ -18,6 +18,8 @@ validation, FastAPI product layer, Next.js dashboard, PostgreSQL metadata schema
 and reproducible reports. Development data and generated artifacts remain local
 and are mounted into containers rather than copied into images.
 
+![MarketLab research dashboard](docs/assets/screenshots/dashboard.png)
+
 ## Research results
 
 The current full-history, net-of-modeled-cost backtests produced the following
@@ -105,6 +107,13 @@ Open:
 - Dashboard: `http://localhost:3000`
 - API documentation: `http://localhost:8000/docs`
 - API health: `http://localhost:8000/health`
+
+Capture the dashboard, Factor Lab, and ML Lab from the running application with:
+
+```bash
+cd frontend
+npm run screenshots
+```
 
 The data-provider API key is unnecessary for browsing existing artifacts or
 running backtests. It is required only when explicitly running download scripts.

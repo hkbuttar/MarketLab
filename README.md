@@ -2,6 +2,8 @@
 
 **Release:** `v1.0.0`
 
+**Live demo:** [market-lab-mauve.vercel.app](https://market-lab-mauve.vercel.app/)
+
 MarketLab is a full-stack quantitative research platform for factor analysis,
 systematic strategy construction, realistic portfolio backtesting,
 transaction-cost and capacity modeling, factor attribution, regime analysis,

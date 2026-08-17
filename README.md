@@ -12,10 +12,11 @@ research report without rebuilding the stack for every strategy.
 
 ## Status
 
-The repository foundation, automated quality checks, and Python package
-boundaries are in place. Domain modules intentionally contain no implementation
-yet; development follows the data-to-report dependency order described in the
-project blueprint.
+MarketLab now includes the quantitative research engine, point-in-time data
+pipeline, factor and strategy research, realistic backtesting, robustness and ML
+validation, FastAPI product layer, Next.js dashboard, PostgreSQL metadata schema,
+and reproducible reports. Development data and generated artifacts remain local
+and are mounted into containers rather than copied into images.
 
 ## Scope
 
@@ -46,3 +47,32 @@ PostgreSQL is available for later backend work:
 ```bash
 docker compose up -d postgres
 ```
+
+## Full local demo with Docker
+
+The container stack runs PostgreSQL, FastAPI, and the Next.js dashboard. Existing
+`data/`, `experiments/`, and `reports/` directories are mounted into the backend.
+
+```bash
+cp .env.example .env
+docker compose config --quiet
+docker compose up --build
+```
+
+Open:
+
+- Dashboard: `http://localhost:3000`
+- API documentation: `http://localhost:8000/docs`
+- API health: `http://localhost:8000/health`
+
+The data-provider API key is unnecessary for browsing existing artifacts or
+running backtests. It is required only when explicitly running download scripts.
+
+Stop the application without deleting PostgreSQL data:
+
+```bash
+docker compose down
+```
+
+The research datasets are intentionally not baked into the images. Populate the
+local artifact directories before starting the complete demo.

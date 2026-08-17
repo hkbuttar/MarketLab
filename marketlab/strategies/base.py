@@ -1,6 +1,7 @@
 """Common strategy interface."""
 
 from dataclasses import dataclass
+from typing import Literal
 
 
 @dataclass(frozen=True, slots=True)
@@ -22,12 +23,22 @@ class StrategyConfig:
     weighting: str = "equal"
     maximum_position: float = 0.05
     maximum_turnover: float = 0.20
+    rebalance_frequency: Literal["weekly", "monthly"] = "monthly"
+    signal_delay_sessions: int = 1
 
     def __post_init__(self) -> None:
         if not self.factors:
             raise ValueError("strategy requires at least one factor")
         if not 0 < self.selection_fraction <= 1:
             raise ValueError("selection_fraction must be in (0, 1]")
+        if self.weighting not in {"equal", "score"}:
+            raise ValueError("unsupported weighting method")
+        if not 0 < self.maximum_position <= 1:
+            raise ValueError("maximum_position must be in (0, 1]")
+        if not 0 <= self.maximum_turnover <= 1:
+            raise ValueError("maximum_turnover must be in [0, 1]")
+        if self.signal_delay_sessions < 1:
+            raise ValueError("signals must execute at least one session later")
 
 
 def composite_score(row: dict[str, str], config: StrategyConfig) -> float | None:

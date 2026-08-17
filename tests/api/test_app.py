@@ -25,7 +25,6 @@ def test_feature_catalog_uses_quantitative_registry() -> None:
 
 def test_blueprint_routers_are_mounted() -> None:
     for path in (
-        "strategies",
         "backtests",
         "experiments",
         "compare",
@@ -37,6 +36,14 @@ def test_blueprint_routers_are_mounted() -> None:
     factor_response = client.get("/api/v1/factors")
     assert factor_response.status_code == 200
     assert factor_response.json()["items"]
+    strategy_response = client.get("/api/v1/strategies")
+    assert strategy_response.status_code == 200
+    assert {item["name"] for item in strategy_response.json()["items"]} == {
+        "momentum",
+        "mean_reversion",
+        "low_volatility",
+        "quality_value_momentum",
+    }
 
 
 def test_openapi_metadata_and_versioned_routes() -> None:

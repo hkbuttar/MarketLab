@@ -218,6 +218,13 @@ the smaller fundamental feature file with:
 python scripts/build_features.py --skip-technical
 ```
 
+The strategy registry includes a weekly, long-only mean-reversion design that
+ranks `return_20d_zscore` ascending, selects the most oversold 20%, applies a 5%
+position cap and 50% one-way turnover ceiling, and executes with a one-session
+delay. It is discoverable through `GET /api/v1/strategies`. It is intentionally
+excluded from the existing monthly target artifact until the expanded technical
+dataset and weekly research panel are regenerated.
+
 ## Monthly factor research
 
 Build month-end cross-sectional ranks, quintiles, forward 21-session returns,

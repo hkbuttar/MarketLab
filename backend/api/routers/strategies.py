@@ -27,6 +27,10 @@ def list_strategies() -> dict[str, list[dict[str, object]]]:
                 "weighting": config.weighting,
                 "maximum_position": config.maximum_position,
                 "maximum_turnover": config.maximum_turnover,
+                "maximum_holdings": config.maximum_holdings,
+                "minimum_dollar_volume": config.minimum_dollar_volume,
+                "cash_buffer": config.cash_buffer,
+                "maximum_sector_weight": config.maximum_sector_weight,
                 "rebalance_frequency": config.rebalance_frequency,
                 "signal_delay_sessions": config.signal_delay_sessions,
             }

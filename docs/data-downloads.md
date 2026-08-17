@@ -232,6 +232,13 @@ toward an annual target, records residual cash when exposure is reduced, and
 permits leverage only when explicitly enabled. Both gross leverage and the
 post-scaling maximum position can be capped.
 
+The constraint layer supports deterministic maximum-holdings selection,
+point-in-time minimum dollar volume, a residual cash buffer, and proportional
+sector-cap redistribution. Maximum holdings, liquidity, and cash are enforced
+directly by monthly portfolio construction. Sector caps require explicit sector
+labels and remain opt-in because current Alpha Vantage classifications are not a
+historically effective GICS dataset.
+
 ## Monthly factor research
 
 Build month-end cross-sectional ranks, quintiles, forward 21-session returns,

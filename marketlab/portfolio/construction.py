@@ -7,6 +7,11 @@ import math
 from pathlib import Path
 
 from marketlab.features.preprocessing.investable import INVESTABLE_COLUMNS
+from marketlab.portfolio.constraints import (
+    apply_cash_buffer,
+    filter_minimum_liquidity,
+    limit_holdings,
+)
 from marketlab.portfolio.turnover import limit_turnover
 from marketlab.portfolio.weighting import construct_weights
 from marketlab.strategies.base import StrategyConfig, composite_score
@@ -97,6 +102,15 @@ def _construct_date(
             for row in rows
             if (score := composite_score(row, config)) is not None
         }
+        scores = filter_minimum_liquidity(
+            scores,
+            {
+                row["symbol"]: float(row["average_dollar_volume_21"])
+                for row in rows
+                if row["average_dollar_volume_21"]
+            },
+            config.minimum_dollar_volume,
+        )
         minimum_holdings = math.ceil(1 / config.maximum_position)
         if len(scores) < minimum_holdings:
             turnovers[config.name] = 0.0
@@ -122,9 +136,12 @@ def _construct_date(
                 :selection_count
             ]
         )
+        if config.maximum_holdings is not None:
+            selected = limit_holdings(selected, config.maximum_holdings)
         target = construct_weights(
             selected, method=config.weighting, maximum_weight=config.maximum_position
         )
+        target = apply_cash_buffer(target, config.cash_buffer)
         weights, turnover = limit_turnover(
             current[config.name], target, config.maximum_turnover
         )

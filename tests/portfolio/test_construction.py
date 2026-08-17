@@ -2,7 +2,13 @@
 
 import pytest
 
-from marketlab.portfolio.constraints import apply_position_cap
+from marketlab.portfolio.constraints import (
+    apply_cash_buffer,
+    apply_position_cap,
+    apply_sector_cap,
+    filter_minimum_liquidity,
+    limit_holdings,
+)
 from marketlab.portfolio.risk_targeting import portfolio_volatility, target_volatility
 from marketlab.portfolio.turnover import limit_turnover, one_way_turnover
 from marketlab.portfolio.weighting import construct_weights
@@ -104,3 +110,45 @@ def test_portfolio_volatility_uses_covariance() -> None:
     )
 
     assert value == pytest.approx((0.0375) ** 0.5)
+
+
+def test_maximum_holdings_uses_score_then_symbol_order() -> None:
+    result = limit_holdings({"B": 0.8, "A": 0.8, "C": 0.7}, 2)
+
+    assert list(result) == ["A", "B"]
+
+
+def test_minimum_liquidity_excludes_missing_and_thin_symbols() -> None:
+    result = filter_minimum_liquidity(
+        {"LIQUID": 0.9, "THIN": 0.8, "MISSING": 0.7},
+        {"LIQUID": 20_000_000, "THIN": 500_000},
+        1_000_000,
+    )
+
+    assert result == {"LIQUID": 0.9}
+
+
+def test_cash_buffer_scales_risky_exposure() -> None:
+    result = apply_cash_buffer({"A": 0.6, "B": 0.4}, 0.05)
+
+    assert result == pytest.approx({"A": 0.57, "B": 0.38})
+    assert sum(result.values()) == pytest.approx(0.95)
+
+
+def test_sector_cap_redistributes_excess_without_changing_total() -> None:
+    result = apply_sector_cap(
+        {"T1": 0.5, "T2": 0.2, "H": 0.2, "F": 0.1},
+        {"T1": "Tech", "T2": "Tech", "H": "Health", "F": "Finance"},
+        0.5,
+    )
+
+    assert result["T1"] + result["T2"] == pytest.approx(0.5)
+    assert result["H"] + result["F"] == pytest.approx(0.5)
+    assert sum(result.values()) == pytest.approx(1)
+
+
+def test_sector_cap_rejects_missing_labels_and_infeasible_universe() -> None:
+    with pytest.raises(ValueError, match="missing"):
+        apply_sector_cap({"A": 1.0}, {}, 1.0)
+    with pytest.raises(ValueError, match="infeasible"):
+        apply_sector_cap({"A": 0.5, "B": 0.5}, {"A": "One", "B": "Two"}, 0.4)

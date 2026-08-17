@@ -79,6 +79,17 @@ def test_lists_persisted_backtests(tmp_path, monkeypatch) -> None:
     assert jobs[0]["strategy"] == "momentum"
 
 
+def test_list_backtests_ignores_invalid_status_artifacts(tmp_path, monkeypatch) -> None:
+    statuses = _completed_job(tmp_path)
+    (statuses / "corrupt.json").write_bytes(b"\xa3not UTF-8")
+    (statuses / "._metadata.json").write_bytes(b"\xa3macOS metadata")
+    monkeypatch.setattr(service, "STATUS_ROOT", statuses)
+
+    jobs = service.list_backtest_jobs()
+
+    assert [job["experiment_id"] for job in jobs] == ["test-run"]
+
+
 def test_result_endpoint_calculates_metrics_and_curve(tmp_path, monkeypatch) -> None:
     _completed_job(tmp_path)
     monkeypatch.setattr(service, "STATUS_ROOT", tmp_path / "statuses")

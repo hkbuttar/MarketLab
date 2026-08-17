@@ -15,9 +15,18 @@ def experiment_catalog(project_root: Path = Path(".")) -> list[ExperimentListIte
         return []
     items = []
     for path in root.glob("*/*.json"):
+        if path.name.startswith("."):
+            continue
         try:
             manifest = _manifest(path)
-        except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+        except (
+            UnicodeDecodeError,
+            json.JSONDecodeError,
+            KeyError,
+            TypeError,
+            ValueError,
+            OSError,
+        ):
             continue
         git = manifest.get("git") or {}
         items.append(

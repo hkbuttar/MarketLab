@@ -103,9 +103,11 @@ def list_backtest_jobs() -> list[dict[str, object]]:
         return []
     jobs = []
     for path in STATUS_ROOT.glob("*.json"):
+        if path.name.startswith("."):
+            continue
         try:
             value = json.loads(path.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError):
+        except (UnicodeDecodeError, json.JSONDecodeError, OSError):
             continue
         request = value.get("request") or {}
         jobs.append(

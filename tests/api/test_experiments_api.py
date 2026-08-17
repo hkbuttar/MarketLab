@@ -44,3 +44,14 @@ def test_experiment_catalog_and_detail(tmp_path) -> None:
 def test_experiment_detail_is_root_bounded(tmp_path) -> None:
     with pytest.raises(FileNotFoundError):
         experiment_detail("../secret", tmp_path)
+
+
+def test_experiment_catalog_ignores_invalid_artifacts(tmp_path) -> None:
+    _manifest(tmp_path)
+    root = tmp_path / "experiments/comparison"
+    (root / "corrupt.json").write_bytes(b"\xa3not UTF-8")
+    (root / "._metadata.json").write_bytes(b"\xa3macOS metadata")
+
+    catalog = experiment_catalog(tmp_path)
+
+    assert [item.run_id for item in catalog] == ["run-1"]

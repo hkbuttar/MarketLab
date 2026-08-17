@@ -582,6 +582,14 @@ OpenAPI documentation at `http://127.0.0.1:8000/docs`, and quantitative routes
 under `/api/v1`. Application import does not connect to PostgreSQL or external
 data providers, keeping startup and API tests deterministic.
 
+Submit a filtered daily backtest with `POST /api/v1/backtests`. The initial API
+supports the three canonical precomputed strategies, monthly rebalancing, equal
+weights, configurable capital, and a flat transaction-cost rate. It immediately
+returns a queued experiment ID; poll `GET /api/v1/backtests/{experiment_id}` for
+completion and the compact summary. Runs execute through
+`marketlab.backtest.run_daily_backtest` in a FastAPI background task, while
+their detailed daily results remain file artifacts.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

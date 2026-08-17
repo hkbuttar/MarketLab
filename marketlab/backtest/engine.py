@@ -30,6 +30,10 @@ def run_daily_backtest(
     *,
     initial_capital: float = 1_000_000,
     delisting_recovery: float = 0.70,
+    strategies: set[str] | None = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
+    cost_bps: float | None = None,
 ) -> dict[str, object]:
     """Value monthly targets daily using adjusted returns and realized costs."""
 
@@ -39,14 +43,27 @@ def run_daily_backtest(
     partial = output.with_name(f"{output.name}.part")
     calendar, benchmark = _benchmark_calendar(prices)
     date_index = {date: index for index, date in enumerate(calendar)}
-    periods, schedules = _target_schedules(targets, calendar, date_index)
+    periods, schedules = _target_schedules(
+        targets,
+        calendar,
+        date_index,
+        strategies=strategies,
+        start_date=start_date,
+        end_date=end_date,
+    )
+    if not periods:
+        raise ValueError("no portfolio targets match the requested backtest")
     delistings, excluded_symbols = _security_reference(crosswalk)
     for symbol in excluded_symbols:
         schedules.pop(symbol, None)
     _accumulate_symbol_paths(
         prices, schedules, periods, calendar, date_index, delistings, delisting_recovery
     )
-    costs = _trade_costs(trades)
+    costs = _trade_costs(
+        trades,
+        cost_bps=cost_bps,
+        capital_scale=initial_capital / 1_000_000,
+    )
     summary: dict[str, object] = {}
     try:
         with partial.open("w", encoding="utf-8", newline="") as file:
@@ -90,7 +107,13 @@ def _benchmark_calendar(prices: Path) -> tuple[list[str], dict[str, float]]:
 
 
 def _target_schedules(
-    targets: Path, calendar: list[str], date_index: dict[str, int]
+    targets: Path,
+    calendar: list[str],
+    date_index: dict[str, int],
+    *,
+    strategies: set[str] | None = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
 ) -> tuple[
     dict[tuple[str, str], list[float]],
     dict[str, list[tuple[str, str, float]]],
@@ -104,6 +127,12 @@ def _target_schedules(
         if reader.fieldnames != list(PORTFOLIO_COLUMNS):
             raise ValueError("portfolio target columns are not canonical")
         for row in reader:
+            if strategies is not None and row["strategy"] not in strategies:
+                continue
+            if start_date is not None and row["date"] < start_date:
+                continue
+            if end_date is not None and row["date"] > end_date:
+                continue
             rows.append(row)
             if (
                 not signal_dates[row["strategy"]]
@@ -114,12 +143,16 @@ def _target_schedules(
     for strategy, dates in signal_dates.items():
         for position, signal in enumerate(dates):
             start = date_index[signal] + 1
-            end = (
+            period_end = (
                 date_index[dates[position + 1]]
                 if position + 1 < len(dates)
                 else len(calendar) - 1
             )
-            length = max(0, end - start + 1)
+            if end_date is not None:
+                period_end = min(
+                    period_end, bisect.bisect_right(calendar, end_date) - 1
+                )
+            length = max(0, period_end - start + 1)
             periods[(strategy, signal)] = [1.0] * length
             lengths[(strategy, signal)] = length
     for row in rows:
@@ -225,11 +258,18 @@ def _security_reference(path: Path) -> tuple[dict[str, str], set[str]]:
     return result, excluded
 
 
-def _trade_costs(path: Path) -> dict[tuple[str, str], float]:
+def _trade_costs(
+    path: Path, *, cost_bps: float | None = None, capital_scale: float = 1.0
+) -> dict[tuple[str, str], float]:
     costs: dict[tuple[str, str], float] = defaultdict(float)
     with gzip.open(path, "rt", encoding="utf-8", newline="") as file:
         for row in csv.DictReader(file):
-            costs[(row["strategy"], row["execution_date"])] += float(row["total_cost"])
+            value = (
+                float(row["total_cost"])
+                if cost_bps is None
+                else float(row["notional"]) * cost_bps / 10_000
+            )
+            costs[(row["strategy"], row["execution_date"])] += value * capital_scale
     return dict(costs)
 
 

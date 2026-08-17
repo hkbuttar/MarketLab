@@ -3,7 +3,12 @@
 import csv
 import gzip
 
-from marketlab.backtest.engine import _apply_symbol, _security_reference
+from marketlab.backtest.engine import (
+    _apply_symbol,
+    _security_reference,
+    _target_schedules,
+    _trade_costs,
+)
 
 
 def test_adjusted_price_path_contributes_weighted_relative_value() -> None:
@@ -54,3 +59,58 @@ def test_security_reference_excludes_exchange_test_symbols(tmp_path) -> None:
 
     assert not delistings
     assert excluded == {"ZXZZT"}
+
+
+def test_target_schedule_filters_strategy_and_date_window(tmp_path) -> None:
+    targets = tmp_path / "targets.csv.gz"
+    columns = ("date", "strategy", "symbol", "score", "weight", "turnover")
+    with gzip.open(targets, "wt", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=columns)
+        writer.writeheader()
+        for strategy in ("momentum", "low_volatility"):
+            for signal in ("2024-01-31", "2024-02-29"):
+                writer.writerow(
+                    {
+                        "date": signal,
+                        "strategy": strategy,
+                        "symbol": "AAA",
+                        "score": 1,
+                        "weight": 1,
+                        "turnover": 0.2,
+                    }
+                )
+    calendar = ["2024-01-31", "2024-02-01", "2024-02-29", "2024-03-01"]
+
+    periods, schedules = _target_schedules(
+        targets,
+        calendar,
+        {date: index for index, date in enumerate(calendar)},
+        strategies={"momentum"},
+        start_date="2024-02-01",
+        end_date="2024-03-01",
+    )
+
+    assert periods == {("momentum", "2024-02-29"): [1.0]}
+    assert schedules == {"AAA": [("momentum", "2024-02-29", 1.0)]}
+
+
+def test_flat_trade_cost_scales_with_requested_capital(tmp_path) -> None:
+    trades = tmp_path / "trades.csv.gz"
+    with gzip.open(trades, "wt", newline="") as file:
+        writer = csv.DictWriter(
+            file,
+            fieldnames=("strategy", "execution_date", "notional", "total_cost"),
+        )
+        writer.writeheader()
+        writer.writerow(
+            {
+                "strategy": "momentum",
+                "execution_date": "2024-02-01",
+                "notional": 100_000,
+                "total_cost": 25,
+            }
+        )
+
+    costs = _trade_costs(trades, cost_bps=10, capital_scale=2)
+
+    assert costs == {("momentum", "2024-02-01"): 200.0}

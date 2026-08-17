@@ -167,3 +167,24 @@ h2 { font-size: 23px; letter-spacing: -.02em; }
 .method-note { background: #f5e9cf; border-radius: 6px; color: #705b2d; font-size: 9px; line-height: 1.5; margin: 15px 0 0; padding: 9px 11px; }
 @media (max-width: 1100px) { .factor-controls { grid-template-columns: repeat(3, 1fr); } .factor-controls button { grid-column: span 1; } }
 @media (max-width: 800px) { .factor-controls, .factor-metrics, .factor-lab-grid { grid-template-columns: 1fr; } }
+
+.capacity-header { align-items: center; }
+.assumption-pill { background: var(--mint); border-radius: 20px; color: var(--forest); font-size: 10px; font-weight: 800; padding: 8px 12px; }
+.capacity-list { display: grid; gap: 16px; }
+.capacity-card .panel-heading { margin-bottom: 18px; }
+.capacity-metrics { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); margin-bottom: 24px; }
+.capacity-metrics div { background: #f0f0e8; border-radius: 8px; padding: 14px; }
+.capacity-metrics span { color: var(--muted); display: block; font-size: 9px; margin-bottom: 9px; text-transform: uppercase; }
+.capacity-metrics strong { font: 500 22px Georgia, serif; }
+.capacity-curve { border-top: 1px solid var(--line); display: grid; padding-top: 17px; }
+.capacity-point { align-items: center; display: grid; font-size: 10px; gap: 12px; grid-template-columns: 70px 1fr 60px 65px; padding: 7px 0; }
+.capacity-point > span, .capacity-point strong, .capacity-point em { font-family: ui-monospace, monospace; }
+.capacity-point i { background: #e3e5dd; border-radius: 8px; height: 7px; overflow: hidden; }
+.capacity-point b { display: block; height: 100%; }
+.capacity-point b.feasible { background: var(--forest); }
+.capacity-point b.infeasible { background: var(--rust); }
+.capacity-point strong, .capacity-point em { font-size: 9px; font-style: normal; text-align: right; }
+.capacity-point em { color: var(--muted); }
+.capacity-empty { margin-top: 30px; text-align: center; }
+.capacity-empty code { background: var(--forest); border-radius: 6px; color: white; display: inline-block; font-size: 11px; margin-top: 20px; padding: 11px 14px; }
+@media (max-width: 720px) { .capacity-metrics { grid-template-columns: 1fr; } .capacity-point { grid-template-columns: 62px 1fr 55px; } .capacity-point em { display: none; } }

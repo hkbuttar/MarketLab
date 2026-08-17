@@ -619,6 +619,21 @@ top-quintile turnover, cross-factor correlations, and top-quintile sector
 composition. Sector composition is clearly labeled as using current Alpha
 Vantage classifications rather than historically effective GICS membership.
 
+## Canonical Parquet storage
+
+Build typed, Zstandard-compressed research files without loading the complete
+price history into memory:
+
+```bash
+python scripts/build_parquet_storage.py
+```
+
+Outputs are written under `data/processed/parquet/`: `prices.parquet`,
+`benchmark.parquet`, `securities.parquet`, `fundamentals.parquet`, and
+`risk_free.parquet`. Conversion uses atomic partial files, fixed Arrow schemas,
+and a manifest containing row, row-group, and byte counts. The three-month
+Treasury yield is stored as a decimal annual rate rather than a percentage.
+
 ## Data still requiring a licensed source
 
 Alpha Vantage `OVERVIEW` provides current sector and industry labels, not a

@@ -65,6 +65,25 @@ def test_dashboard_handles_an_empty_project(tmp_path: Path) -> None:
     assert summary.recent_reports == []
 
 
+def test_dashboard_ignores_invalid_experiment_artifacts(tmp_path: Path) -> None:
+    experiment_root = tmp_path / "experiments/comparison"
+    experiment_root.mkdir(parents=True)
+    (experiment_root / "corrupt.json").write_bytes(b"\xa3not UTF-8")
+    (experiment_root / "._metadata.json").write_bytes(b"\xa3macOS metadata")
+    _write_json(
+        experiment_root / "run-1.json",
+        {
+            "run_id": "run-1",
+            "experiment": "comparison",
+            "created_at": "2026-01-01T00:00:00Z",
+        },
+    )
+
+    summary = dashboard_summary(tmp_path)
+
+    assert [item.experiment_id for item in summary.recent_experiments] == ["run-1"]
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value), encoding="utf-8")

@@ -74,10 +74,12 @@ def _factor_metrics(report: dict[str, Any]) -> list[DashboardMetric]:
 def _recent_experiments(root: Path) -> list[RecentExperiment]:
     values: list[RecentExperiment] = []
     for path in root.glob("*/*.json"):
+        if path.name.startswith("."):
+            continue
         try:
             manifest = _json(path)
             run_id = str(manifest["run_id"])
-        except (KeyError, TypeError, json.JSONDecodeError):
+        except (KeyError, TypeError, UnicodeDecodeError, json.JSONDecodeError, OSError):
             continue
         values.append(
             RecentExperiment(

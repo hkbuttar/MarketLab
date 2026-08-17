@@ -158,6 +158,7 @@ python scripts/generate_flagship_studies.py
 - [ML validation](docs/ml-validation.md)
 - [Testing](docs/testing.md)
 - [Performance and laptop resource budget](docs/performance.md)
+- [Render and Vercel deployment](docs/deployment-render-vercel.md)
 - [User guide](docs/user-guide.md)
 
 ## License

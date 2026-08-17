@@ -188,3 +188,25 @@ h2 { font-size: 23px; letter-spacing: -.02em; }
 .capacity-empty { margin-top: 30px; text-align: center; }
 .capacity-empty code { background: var(--forest); border-radius: 6px; color: white; display: inline-block; font-size: 11px; margin-top: 20px; padding: 11px 14px; }
 @media (max-width: 720px) { .capacity-metrics { grid-template-columns: 1fr; } .capacity-point { grid-template-columns: 62px 1fr 55px; } .capacity-point em { display: none; } }
+
+.builder-grid { display: grid; gap: 16px; grid-template-columns: 1.15fr .85fr; }
+.builder-fields { display: grid; gap: 16px; }
+.builder-fields label { color: var(--muted); display: grid; font-size: 9px; font-weight: 800; gap: 7px; letter-spacing: .08em; text-transform: uppercase; }
+.builder-fields input, .builder-fields select { background: #f7f6f0; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); font: 12px Inter, sans-serif; height: 42px; padding: 0 11px; text-transform: none; width: 100%; }
+.field-pair { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.input-suffix { position: relative; }
+.input-suffix span { color: var(--muted); font-size: 10px; position: absolute; right: 12px; top: 14px; }
+.run-backtest { background: var(--forest); border: 0; border-radius: 7px; color: white; cursor: pointer; font-size: 11px; font-weight: 800; margin-top: 20px; padding: 13px 18px; width: 100%; }
+.run-backtest:disabled { cursor: wait; opacity: .55; }
+.builder-error { color: var(--rust); font-size: 11px; margin: 13px 0 0; }
+.builder-spec dl { display: grid; margin: 0; }
+.builder-spec dl div { align-items: baseline; border-top: 1px solid #e3e4dc; display: flex; gap: 18px; justify-content: space-between; padding: 12px 2px; }
+.builder-spec dl div:first-child { border-top: 0; padding-top: 0; }
+.builder-spec dt { color: var(--muted); font-size: 9px; text-transform: uppercase; }
+.builder-spec dd { font-size: 10px; font-weight: 700; margin: 0; max-width: 65%; text-align: right; }
+.job-panel { align-items: center; border-left: 4px solid #c7a84e; display: flex; justify-content: space-between; margin-top: 16px; }
+.job-panel.completed { border-left-color: #438263; }
+.job-panel.failed { border-left-color: var(--rust); }
+.job-panel span { color: var(--muted); font-size: 10px; }
+@media (max-width: 850px) { .builder-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .field-pair { grid-template-columns: 1fr; } .job-panel { align-items: flex-start; flex-direction: column; gap: 12px; } }

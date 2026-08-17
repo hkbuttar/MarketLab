@@ -2,7 +2,7 @@ const navigation = [
   { label: "Overview", href: "/" },
   { label: "Factor Lab", href: "/factors" },
   { label: "Capacity", href: "/capacity" },
-  { label: "Strategies", href: "#" },
+  { label: "Strategies", href: "/strategies" },
   { label: "Backtests", href: "#" },
   { label: "ML Lab", href: "#" },
   { label: "Experiments", href: "#" },

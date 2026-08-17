@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>MarketLab Flagship Study: Machine Learning</title><style>
+body{font:16px/1.6 system-ui,sans-serif;color:#17211d;max-width:900px;
+margin:48px auto;padding:0 24px}h1,h2{font-family:Georgia,serif}
+h1{font-size:42px}h2{margin-top:36px;border-bottom:1px solid #ddd;
+padding-bottom:8px}table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #ddd;padding:9px;text-align:left}th{width:35%}
+.notice{background:#edf2e8;padding:14px;border-radius:8px}
+code{font-size:13px}</style></head><body><h1>MarketLab Flagship Study: Machine Learning</h1>
+<p><strong>Experiment:</strong> <code>flagship-machine-learning</code></p>
+<section><h2>Research hypothesis</h2>
+<p>Do nonlinear ranking models add out-of-sample value over simple factors and SPY?</p></section>
+<section><h2>Experiment configuration</h2>
+<table><tr><th>Maximum One Way Turnover</th><td>0.2</td></tr><tr><th>Maximum Position</th><td>0.05</td></tr><tr><th>Selection Fraction</th><td>0.2</td></tr><tr><th>Transaction Cost Bps</th><td>10.0</td></tr><tr><th>Weighting</th><td>equal</td></tr></table></section><section><h2>Validation design</h2><p>The shared comparison covers 2018-01-31 through 2026-06-30 using 102 monthly observations, walk-forward predictions, identical selection and turnover rules, and a 21-session forward-return horizon.</p></section><section><h2>Model results</h2><p>elastic net: CAGR 8.14%, Sharpe 0.38; gradient boosting: CAGR 8.78%, Sharpe 0.40; random forest: CAGR 8.17%, Sharpe 0.37.</p></section><section><h2>Simple-strategy comparison</h2><p>The best ML model was gradient boosting with net CAGR 8.78% and Sharpe 0.40. The quality-value-momentum baseline returned 11.77% with Sharpe 0.52.</p></section><section><h2>Benchmark comparison</h2><p>SPY returned 14.24% with Sharpe 0.71. The best ML model&#x27;s active CAGR was -5.46%.</p></section><section><h2>Evidence-based finding</h2><p>The tested nonlinear models did not provide incremental out-of-sample value: gradient boosting led the ML models, but trailed both the simple multi-factor baseline and SPY.</p></section>
+<section><h2>Limitations</h2><ul><li>Historical backtests do not guarantee future performance.</li><li>Daily data and modeled execution do not reproduce intraday liquidity.</li><li>Current sector labels are not historically effective GICS classifications.</li><li>Survivorship and source-data limitations remain documented in the data methodology.</li><li>The comparison covers three CPU-oriented model families and is not evidence about every possible machine-learning specification.</li></ul></section>
+<section><h2>Conclusion</h2><p class="notice">This report documents observed
+research results and does not constitute an investment recommendation.</p></section>
+</body></html>

@@ -77,6 +77,22 @@ docker compose down
 The research datasets are intentionally not baked into the images. Populate the
 local artifact directories before starting the complete demo.
 
+## Flagship research studies
+
+The published studies use persisted MarketLab results and state negative as well
+as positive findings:
+
+- [Momentum](docs/studies/flagship-momentum.md)
+- [Low volatility](docs/studies/flagship-low-volatility.md)
+- [Quality, value, and momentum](docs/studies/flagship-quality-value-momentum.md)
+- [Machine learning](docs/studies/flagship-machine-learning.md)
+
+Regenerate all Markdown and HTML studies after rebuilding research artifacts:
+
+```bash
+python scripts/generate_flagship_studies.py
+```
+
 ## Documentation
 
 - [System architecture](docs/system-architecture.md)
@@ -88,4 +104,5 @@ local artifact directories before starting the complete demo.
 - [Backtesting methodology](docs/backtesting-methodology.md)
 - [ML validation](docs/ml-validation.md)
 - [Testing](docs/testing.md)
+- [Performance and laptop resource budget](docs/performance.md)
 - [User guide](docs/user-guide.md)

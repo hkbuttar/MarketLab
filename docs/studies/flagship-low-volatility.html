@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>MarketLab Flagship Study: Low Volatility</title><style>
+body{font:16px/1.6 system-ui,sans-serif;color:#17211d;max-width:900px;
+margin:48px auto;padding:0 24px}h1,h2{font-family:Georgia,serif}
+h1{font-size:42px}h2{margin-top:36px;border-bottom:1px solid #ddd;
+padding-bottom:8px}table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #ddd;padding:9px;text-align:left}th{width:35%}
+.notice{background:#edf2e8;padding:14px;border-radius:8px}
+code{font-size:13px}</style></head><body><h1>MarketLab Flagship Study: Low Volatility</h1>
+<p><strong>Experiment:</strong> <code>flagship-low-volatility</code></p>
+<section><h2>Research hypothesis</h2>
+<p>Does low-volatility investing reduce risk consistently across regimes?</p></section>
+<section><h2>Experiment configuration</h2>
+<table><tr><th>Asset Class</th><td>daily U.S. equities</td></tr><tr><th>Execution</th><td>next-session execution</td></tr><tr><th>Portfolio</th><td>long-only monthly rebalance</td></tr><tr><th>Transaction Costs</th><td>commission, spread, and market impact</td></tr></table></section><section><h2>Data and universe</h2><p>The net backtest contains 6,652 daily observations from 2000-03-01 through 2026-08-12. SPY is the benchmark.</p></section><section><h2>Portfolio construction and execution</h2><p>Signals are ranked cross-sectionally in the point-in-time investable universe. Targets are long-only and executed on the next session with modeled trading costs.</p></section><section><h2>Performance and risk</h2><p>Net CAGR was 9.85%, annualized volatility was 13.73%, Sharpe was 0.75, and maximum drawdown was -43.26%. Modeled transaction costs totaled $277,577.</p></section><section><h2>Regime analysis</h2><p>bear high vol: CAGR -16.16%, Sharpe -0.64; bear low vol: CAGR -16.90%, Sharpe -1.95; bull high vol: CAGR 27.75%, Sharpe 2.05; bull low vol: CAGR 13.00%, Sharpe 1.36.</p></section><section><h2>Capacity</h2><p>At the latest rebalance, the 10% ADV limit implied maximum AUM of $69,262,466; the binding security was HEFT. The historical minimum capacity estimate was $22,237,275.</p></section><section><h2>Robustness</h2><p>The MarketLab diagnostic score was 66.2/100 (moderate). This is a project-specific diagnostic, not an industry-standard rating.</p></section><section><h2>Evidence-based finding</h2><p>Low volatility produced positive full-sample risk-adjusted returns and shallower losses than momentum, but returns were negative in both tested bear regimes.</p></section>
+<section><h2>Limitations</h2><ul><li>Historical backtests do not guarantee future performance.</li><li>Daily data and modeled execution do not reproduce intraday liquidity.</li><li>Current sector labels are not historically effective GICS classifications.</li><li>Survivorship and source-data limitations remain documented in the data methodology.</li></ul></section>
+<section><h2>Conclusion</h2><p class="notice">This report documents observed
+research results and does not constitute an investment recommendation.</p></section>
+</body></html>

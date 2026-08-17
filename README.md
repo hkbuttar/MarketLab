@@ -18,6 +18,35 @@ validation, FastAPI product layer, Next.js dashboard, PostgreSQL metadata schema
 and reproducible reports. Development data and generated artifacts remain local
 and are mounted into containers rather than copied into images.
 
+## Research results
+
+The current full-history, net-of-modeled-cost backtests produced the following
+results. These are research observations, not expected returns or investment
+recommendations.
+
+| Strategy | Period | Net CAGR | Sharpe | Maximum drawdown | Robustness |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Momentum | 2000–2026 | 4.32% | 0.27 | -63.18% | 34.4/100, weak |
+| Low volatility | 2000–2026 | 9.85% | 0.75 | -43.26% | 66.2/100, moderate |
+| Quality, value, momentum | 2009–2026 | 13.39% | 0.77 | -42.36% | 69.9/100, moderate |
+
+The stricter shared out-of-sample comparison ran from January 2018 through June
+2026 with identical selection, turnover, and cost assumptions:
+
+| Model or baseline | Net CAGR | Sharpe | Maximum drawdown |
+| --- | ---: | ---: | ---: |
+| SPY | 14.24% | 0.71 | -19.78% |
+| Quality, value, momentum | 11.77% | 0.52 | -32.23% |
+| Gradient boosting | 8.78% | 0.40 | -27.31% |
+| Random forest | 8.17% | 0.37 | -26.61% |
+| Elastic Net | 8.14% | 0.38 | -26.72% |
+
+The tested ML models did not add out-of-sample value over the simple multi-factor
+baseline or SPY. Full methodology, negative findings, regime behavior, capacity,
+and limitations are documented in the flagship studies below. Current sector
+labels are not historically effective GICS classifications, and daily modeled
+execution cannot reproduce intraday liquidity or live fills.
+
 ## Scope
 
 MarketLab targets daily U.S. equities and benchmark ETFs, technical and
@@ -118,3 +147,7 @@ python scripts/generate_flagship_studies.py
 - [Testing](docs/testing.md)
 - [Performance and laptop resource budget](docs/performance.md)
 - [User guide](docs/user-guide.md)
+
+## License
+
+MarketLab is available under the [MIT License](LICENSE).

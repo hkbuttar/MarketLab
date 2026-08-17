@@ -540,6 +540,18 @@ parameters, Git revision and dirty state, reported metrics, and SHA-256 digest
 and byte size of every input and output artifact. This makes changes in either
 code or local research data visible when two runs are compared.
 
+Verify or reproduce a recorded run by its manifest ID:
+
+```bash
+python scripts/reproduce_experiment.py RUN_ID --verify-only
+python scripts/reproduce_experiment.py RUN_ID
+```
+
+Exact reproduction requires the recorded Git revision, a clean working tree,
+and unchanged input files. Runs originally created from uncommitted code cannot
+be reconstructed exactly. `--allow-code-change` permits an explicitly labeled
+non-exact rerun while retaining strict input and output fingerprint checks.
+
 ## Experiment metadata database
 
 MarketLab stores compact experiment metadata in PostgreSQL while retaining

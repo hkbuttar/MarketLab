@@ -41,3 +41,40 @@ class BacktestStatus(BaseModel):
     artifact_path: str | None = None
     summary: dict[str, object] | None = None
     error: str | None = None
+
+
+class BacktestListItem(BaseModel):
+    """Compact persisted job metadata for experiment discovery."""
+
+    experiment_id: str
+    status: Literal["queued", "running", "completed", "failed"]
+    strategy: str | None = None
+    created_at: str | None = None
+
+
+class EquityPoint(BaseModel):
+    date: str
+    net_nav: float
+    gross_nav: float
+    benchmark_nav: float
+
+
+class BacktestMetrics(BaseModel):
+    total_return: float
+    benchmark_return: float
+    cagr: float
+    annualized_volatility: float
+    sharpe: float
+    maximum_drawdown: float
+    total_costs: float
+    cost_drag: float
+    observations: int
+
+
+class BacktestResult(BaseModel):
+    experiment_id: str
+    strategy: str
+    start_date: str
+    end_date: str
+    metrics: BacktestMetrics
+    equity_curve: list[EquityPoint]

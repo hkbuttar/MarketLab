@@ -27,11 +27,13 @@ def test_blueprint_routers_are_mounted() -> None:
     for path in (
         "experiments",
         "compare",
-        "reports",
     ):
         response = client.get(f"/api/v1/{path}")
         assert response.status_code == 200
         assert response.json() == {"items": []}
+    report_response = client.get("/api/v1/reports")
+    assert report_response.status_code == 200
+    assert "items" in report_response.json()
     backtest_response = client.get("/api/v1/backtests")
     assert backtest_response.status_code == 200
     assert "items" in backtest_response.json()

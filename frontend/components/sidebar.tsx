@@ -7,7 +7,7 @@ const navigation = [
   { label: "ML Lab", href: "/models" },
   { label: "Experiments", href: "#" },
   { label: "Compare", href: "/compare" },
-  { label: "Reports", href: "#" },
+  { label: "Reports", href: "/reports" },
 ];
 
 export function Sidebar({ active, connected }: { active: string; connected: boolean }) {

@@ -289,3 +289,21 @@ h2 { font-size: 23px; letter-spacing: -.02em; }
 .metric-name { color: var(--muted); font-size: 9px; }
 .metric-value { font: 800 10px ui-monospace, monospace; }
 @media (max-width: 720px) { .comparison-options { grid-template-columns: 1fr; } .comparison-table-wrap { overflow-x: auto; } }
+
+.report-generator { align-items: center; display: grid; gap: 12px; grid-template-columns: 1fr minmax(220px, 330px) auto; margin-bottom: 16px; }
+.report-generator select { background: #f7f6f0; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); font: 10px Inter, sans-serif; height: 39px; padding: 0 10px; }
+.report-generator button { background: var(--forest); border: 0; border-radius: 7px; color: white; cursor: pointer; font-size: 10px; font-weight: 800; height: 39px; padding: 0 16px; }
+.report-generator button:disabled { opacity: .5; }
+.report-generator > span { color: var(--muted); font-size: 9px; grid-column: 2 / -1; }
+.report-catalog { display: grid; gap: 16px; }
+.report-browser { display: grid; grid-template-columns: repeat(2, 1fr); }
+.report-browser a { align-items: center; border-top: 1px solid #e3e4dc; display: grid; gap: 11px; grid-template-columns: 42px 1fr auto; padding: 12px 4px; }
+.report-browser a:nth-child(-n + 2) { border-top: 0; padding-top: 0; }
+.report-browser a:nth-child(odd) { margin-right: 16px; }
+.report-browser a:hover strong { color: #2d7059; }
+.report-browser strong, .report-browser small { display: block; }
+.report-browser strong { font-size: 10px; }
+.report-browser small { color: var(--muted); font-size: 8px; margin-top: 4px; }
+.report-browser em { color: var(--muted); font: 8px ui-monospace, monospace; }
+.report-preview pre { font: 11px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 0; max-height: calc(100vh - 230px); overflow: auto; white-space: pre-wrap; word-break: break-word; }
+@media (max-width: 800px) { .report-generator { align-items: stretch; grid-template-columns: 1fr; } .report-generator > span { grid-column: auto; } .report-browser { grid-template-columns: 1fr; } .report-browser a, .report-browser a:nth-child(-n + 2) { border-top: 1px solid #e3e4dc; padding: 12px 4px; } .report-browser a:first-child { border-top: 0; padding-top: 0; } .report-browser a:nth-child(odd) { margin-right: 0; } }

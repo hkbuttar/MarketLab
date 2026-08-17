@@ -239,6 +239,12 @@ directly by monthly portfolio construction. Sector caps require explicit sector
 labels and remain opt-in because current Alpha Vantage classifications are not a
 historically effective GICS dataset.
 
+Capacity analysis converts rebalance weight changes and point-in-time 21-session
+average dollar volume into a maximum deployable AUM. It reports the binding
+securities and evaluates an AUM curve using the same half-spread and square-root
+market-impact assumptions as backtest execution. The participation window and
+maximum share of ADV are explicit assumptions rather than inferred constants.
+
 ## Monthly factor research
 
 Build month-end cross-sectional ranks, quintiles, forward 21-session returns,

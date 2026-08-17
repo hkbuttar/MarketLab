@@ -267,3 +267,25 @@ h2 { font-size: 23px; letter-spacing: -.02em; }
 .result-dl dd { font-family: ui-monospace, monospace; font-weight: 800; margin: 0; }
 @media (max-width: 950px) { .result-metrics { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 720px) { .result-metrics, .result-detail-grid { grid-template-columns: 1fr; } .backtest-row { grid-template-columns: 28px 1fr auto; } .backtest-row time { display: none; } }
+
+.comparison-selector { margin-bottom: 16px; }
+.comparison-options { display: grid; gap: 9px; grid-template-columns: repeat(2, 1fr); }
+.comparison-options label { align-items: center; background: #f0f0e8; border: 1px solid transparent; border-radius: 8px; cursor: pointer; display: flex; gap: 11px; padding: 12px; }
+.comparison-options label:has(input:checked) { background: #e0ece3; border-color: #aac8b5; }
+.comparison-options input { accent-color: var(--forest); }
+.comparison-options strong, .comparison-options small { display: block; }
+.comparison-options strong { font-size: 10px; }
+.comparison-options small { color: var(--muted); font: 8px ui-monospace, monospace; margin-top: 4px; }
+.comparison-warnings { background: #f5e9cf; border: 1px solid #dec995; border-radius: 9px; color: #705b2d; display: grid; font-size: 9px; gap: 5px; margin-bottom: 16px; padding: 12px 14px; }
+.comparison-warnings strong { font-size: 10px; margin-bottom: 2px; }
+.comparison-table-wrap { overflow: hidden; }
+.comparison-table { display: grid; min-width: 520px; overflow-x: auto; }
+.comparison-cell { border-left: 1px solid #e2e3da; border-top: 1px solid #e2e3da; padding: 12px; }
+.comparison-cell:nth-child(-n + 6) { border-top: 0; }
+.comparison-cell.heading { background: #eef0e8; }
+.comparison-cell.heading strong, .comparison-cell.heading small { display: block; }
+.comparison-cell.heading strong { font-size: 10px; }
+.comparison-cell.heading small { color: var(--muted); font: 8px ui-monospace, monospace; margin-top: 4px; }
+.metric-name { color: var(--muted); font-size: 9px; }
+.metric-value { font: 800 10px ui-monospace, monospace; }
+@media (max-width: 720px) { .comparison-options { grid-template-columns: 1fr; } .comparison-table-wrap { overflow-x: auto; } }

@@ -6,6 +6,7 @@ const navigation = [
   { label: "Backtests", href: "/backtests" },
   { label: "ML Lab", href: "/models" },
   { label: "Experiments", href: "#" },
+  { label: "Compare", href: "/compare" },
   { label: "Reports", href: "#" },
 ];
 

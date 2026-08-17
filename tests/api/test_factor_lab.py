@@ -94,6 +94,23 @@ def test_factor_lab_rejects_unknown_factor_and_horizon() -> None:
     )
 
 
+def test_factor_lab_ignores_invalid_overview_artifacts(tmp_path: Path) -> None:
+    overviews = tmp_path / "overviews"
+    valid = overviews / "AAA_overview/2020/AAA_overview.json"
+    valid.parent.mkdir(parents=True)
+    valid.write_text(
+        json.dumps({"Symbol": "AAA", "Sector": "Technology"}), encoding="utf-8"
+    )
+    (valid.parent / "._AAA_overview.json").write_bytes(b"\xa3macOS metadata")
+    invalid = overviews / "BBB_overview/2020/BBB_overview.json"
+    invalid.parent.mkdir(parents=True)
+    invalid.write_bytes(b"\xa3not UTF-8")
+
+    from backend.services.factor_lab import _current_sectors
+
+    assert _current_sectors(overviews) == {"AAA": "Technology"}
+
+
 def _write_csv(
     path: Path, columns: tuple[str, ...], rows: list[tuple[object, ...]]
 ) -> None:

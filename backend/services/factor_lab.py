@@ -166,9 +166,11 @@ def _sector_exposure(
 def _current_sectors(root: Path) -> dict[str, str]:
     sectors: dict[str, str] = {}
     for path in root.glob("*_overview/*/*_overview.json"):
+        if any(part.startswith(".") for part in path.relative_to(root).parts):
+            continue
         try:
             value = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
+        except (UnicodeDecodeError, json.JSONDecodeError, OSError):
             continue
         symbol = str(value.get("Symbol", ""))
         sector = str(value.get("Sector", "")).strip()

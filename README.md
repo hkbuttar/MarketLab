@@ -76,3 +76,16 @@ docker compose down
 
 The research datasets are intentionally not baked into the images. Populate the
 local artifact directories before starting the complete demo.
+
+## Documentation
+
+- [System architecture](docs/system-architecture.md)
+- [Repository architecture](docs/repository-architecture.md)
+- [Data methodology](docs/data-methodology.md)
+- [Canonical schemas](docs/data-schemas.md)
+- [Data acquisition and processing](docs/data-downloads.md)
+- [Factor research](docs/factor-research.md)
+- [Backtesting methodology](docs/backtesting-methodology.md)
+- [ML validation](docs/ml-validation.md)
+- [Testing](docs/testing.md)
+- [User guide](docs/user-guide.md)

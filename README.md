@@ -42,6 +42,18 @@ ruff check .
 black --check .
 ```
 
+With raw provider downloads already present, inspect the complete resumable
+research workflow before running it:
+
+```bash
+python scripts/run_research_pipeline.py --dry-run
+```
+
+Completed artifacts are skipped, so the same command without `--dry-run` resumes
+from the first missing task. Use `--start-at` and `--through` to run an inclusive
+stage range from `data`, `features`, `research`, `validation`, `ml`, and
+`reporting`. Each real run writes a manifest under `experiments/pipeline_runs/`.
+
 PostgreSQL is available for later backend work:
 
 ```bash

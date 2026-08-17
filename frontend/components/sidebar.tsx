@@ -5,7 +5,7 @@ const navigation = [
   { label: "Strategies", href: "/strategies" },
   { label: "Backtests", href: "/backtests" },
   { label: "ML Lab", href: "/models" },
-  { label: "Experiments", href: "#" },
+  { label: "Experiments", href: "/experiments" },
   { label: "Compare", href: "/compare" },
   { label: "Reports", href: "/reports" },
 ];

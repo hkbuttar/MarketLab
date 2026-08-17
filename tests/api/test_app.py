@@ -24,13 +24,13 @@ def test_feature_catalog_uses_quantitative_registry() -> None:
 
 
 def test_blueprint_routers_are_mounted() -> None:
-    for path in (
-        "experiments",
-        "compare",
-    ):
+    for path in ("compare",):
         response = client.get(f"/api/v1/{path}")
         assert response.status_code == 200
         assert response.json() == {"items": []}
+    experiment_response = client.get("/api/v1/experiments")
+    assert experiment_response.status_code == 200
+    assert "items" in experiment_response.json()
     report_response = client.get("/api/v1/reports")
     assert report_response.status_code == 200
     assert "items" in report_response.json()

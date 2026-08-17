@@ -14,8 +14,9 @@ provide:
 - `ALPHA_VANTAGE_API_KEY`: the provider key, or an empty value if production
   downloads will remain disabled.
 
-The startup command prepares `/app/storage`, creates the PostgreSQL schema, and
-binds FastAPI to Render's assigned port. The database is not publicly accessible.
+The `scripts.start_render` entry point prepares `/app/storage`, creates the
+PostgreSQL schema, validates Render's assigned port, and replaces itself with
+FastAPI. The database is not publicly accessible.
 
 The persistent disk begins empty. From the Render service shell, populate these
 directories using a private transfer or object-storage download:

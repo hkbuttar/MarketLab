@@ -7,6 +7,7 @@ import pytest
 from backend.api.app import LOCAL_ORIGINS, allowed_origins
 from backend.database.session import normalize_database_url
 from marketlab.deployment.render import prepare_persistent_storage
+from scripts.start_render import uvicorn_command
 
 
 def test_render_database_url_uses_installed_psycopg_driver() -> None:
@@ -57,8 +58,18 @@ def test_storage_preparation_does_not_replace_existing_data(tmp_path: Path) -> N
 def test_blueprint_provisions_database_disk_and_secret_prompts() -> None:
     blueprint = Path("render.yaml").read_text(encoding="utf-8")
     assert "runtime: docker" in blueprint
+    assert "dockerCommand: python -m scripts.start_render" in blueprint
     assert "healthCheckPath: /health" in blueprint
     assert "mountPath: /app/storage" in blueprint
     assert "property: connectionString" in blueprint
     assert "MARKETLAB_ALLOWED_ORIGINS" in blueprint
     assert blueprint.count("sync: false") == 3
+
+
+def test_render_start_command_validates_assigned_port() -> None:
+    assert uvicorn_command("12000")[-1] == "12000"
+    assert uvicorn_command(None)[-1] == "10000"
+    with pytest.raises(RuntimeError, match="integer"):
+        uvicorn_command("not-a-port")
+    with pytest.raises(RuntimeError, match="between"):
+        uvicorn_command("70000")

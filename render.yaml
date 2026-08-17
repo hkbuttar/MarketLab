@@ -19,11 +19,7 @@ services:
     autoDeploy: true
     dockerfilePath: ./docker/backend.Dockerfile
     healthCheckPath: /health
-    dockerCommand: >-
-      /bin/sh -c 'python -m scripts.prepare_render_storage &&
-      python -m scripts.create_database_schema &&
-      exec uvicorn backend.api.app:app --host 0.0.0.0
-      --port "${PORT:-10000}"'
+    dockerCommand: python -m scripts.start_render
     disk:
       name: marketlab-artifacts
       mountPath: /app/storage
